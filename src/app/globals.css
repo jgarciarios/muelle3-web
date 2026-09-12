@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #1f3a40;
+
+  /* Muelle 3 — paleta real de marca */
+  --celeste: #7dbeca;
+  --celeste-deep: #3e747f;
+  --celeste-deep-2: #2c5860;
+  --celeste-pale: #dcefef;
+  --navy: #0d1a26;
+  --wood: #8a6239;
+  --wood-2: #4a3421;
+  --mustard: #d99a3e;
+  --amber: #e8b56a;
+  --ink: #1f3a40;
+  --ink-muted: #51767b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-celeste: var(--celeste);
+  --color-celeste-deep: var(--celeste-deep);
+  --color-celeste-deep-2: var(--celeste-deep-2);
+  --color-celeste-pale: var(--celeste-pale);
+  --color-navy: var(--navy);
+  --color-wood: var(--wood);
+  --color-wood-2: var(--wood-2);
+  --color-mustard: var(--mustard);
+  --color-amber: var(--amber);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-fraunces);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
