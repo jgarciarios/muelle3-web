@@ -1,6 +1,7 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getRestauranteId } from "@/lib/supabase/tenant";
 
 export type ReservationFormState = {
   status: "idle" | "success" | "error";
@@ -9,6 +10,9 @@ export type ReservationFormState = {
 };
 
 const PHONE_RE = /^[0-9+()\s-]{6,20}$/;
+
+// Punta del Este / Montevideo no tiene horario de verano vigente: offset fijo -03:00.
+const TIMEZONE_OFFSET = "-03:00";
 
 export async function createReservation(
   _prevState: ReservationFormState,
@@ -33,16 +37,34 @@ export async function createReservation(
     return { status: "error", message: "Revisá los datos marcados.", fieldErrors };
   }
 
+  // `reservas.fecha` es timestamptz: combinamos fecha + hora del form en un
+  // único instante, con el offset fijo de Uruguay (el form no pide huso horario).
+  const fechaHora = `${fecha}T${hora}:00${TIMEZONE_OFFSET}`;
+
   try {
-    const supabase = createClient();
-    const { error } = await supabase.from("reservations").insert({
-      nombre,
+    // El restaurante lo define el deploy (RESTAURANT_SLUG), nunca el formulario:
+    // así este sitio solo puede escribir reservas de su propio tenant.
+    //
+    // Usamos el cliente admin (service_role) para el insert, no la anon key:
+    // la anon key es pública (visible en el bundle) y es la MISMA para todos
+    // los tenants del proyecto multi-tenant, así que darle permiso de insert
+    // vía RLS habilitaría a cualquiera a escribir reservas de OTRO restaurante
+    // pegándole directo a la API REST de Supabase. Con service_role (que
+    // bypassea RLS) el único camino de escritura es este Server Action, que
+    // ya garantiza el restaurante_id correcto — por eso `reservas` no tiene
+    // ninguna policy de insert para anon (ver supabase/migrations/0002_*).
+    const restauranteId = await getRestauranteId();
+    const supabase = createAdminClient();
+
+    const { error } = await supabase.from("reservas").insert({
+      restaurante_id: restauranteId,
+      nombre_cliente: nombre,
       telefono,
       email: email || null,
-      fecha,
-      hora,
+      fecha: fechaHora,
       personas,
       notas: notas || null,
+      estado: "pendiente",
     });
 
     if (error) {
