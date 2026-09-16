@@ -1,6 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SiteNav } from "@/components/nav";
+import { MoodCarousel } from "@/components/mood-carousel";
+import { ReviewsCarousel } from "@/components/reviews-carousel";
+import { MEITRE_RESERVATION_URL } from "@/lib/meitre";
 
 export default function HomePage() {
   return (
@@ -8,13 +11,7 @@ export default function HomePage() {
       {/* HERO */}
       <section className="relative flex min-h-[92vh] items-end overflow-hidden bg-navy">
         <SiteNav />
-        <Image
-          src="/images/muelle-aereo-hq.png"
-          alt="Vista aérea del muelle circular de Muelle 3, Playa Mansa, Punta del Este"
-          fill
-          priority
-          className="object-cover opacity-70"
-        />
+        <MoodCarousel />
         <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent" />
         <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-16">
           <p className="mb-3 text-sm font-semibold tracking-[0.2em] text-amber uppercase">
@@ -24,12 +21,14 @@ export default function HomePage() {
             Frente al mar, con los pies en la arena.
           </h1>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href="/reservas"
+            <a
+              href={MEITRE_RESERVATION_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="rounded-md bg-mustard px-6 py-3 font-semibold text-navy transition hover:brightness-95"
             >
               Reservar una mesa
-            </Link>
+            </a>
             <Link
               href="/menu"
               className="rounded-md border border-white/40 px-6 py-3 font-semibold text-white transition hover:bg-white/10"
@@ -80,16 +79,21 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* RESEÑAS (vista previa — ver comentario en reviews-carousel.tsx) */}
+      <ReviewsCarousel placeId={process.env.NEXT_PUBLIC_GOOGLE_PLACE_ID} />
+
       {/* CTA RESERVAS */}
       <section className="bg-celeste-deep py-16 text-center text-white">
         <h2 className="font-serif text-3xl font-bold">¿Nos hacemos un lugar?</h2>
         <p className="mt-3 text-celeste-pale">Reservá tu mesa en menos de un minuto.</p>
-        <Link
-          href="/reservas"
+        <a
+          href={MEITRE_RESERVATION_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="mt-6 inline-block rounded-md bg-white px-7 py-3 font-semibold text-celeste-deep transition hover:bg-celeste-pale"
         >
           Reservar ahora
-        </Link>
+        </a>
       </section>
 
       <footer className="bg-navy py-10 text-center text-sm text-white/60">
