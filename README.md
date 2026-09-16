@@ -126,3 +126,4 @@ Además del guardado en base, manda un aviso por mail usando la API de Resend (`
 ## Deploy
 
 Pensado para Vercel (Hobby tier alcanza para el arranque). Conectar el repo de GitHub a un proyecto de Vercel. Env var necesaria para que el sitio funcione como está hoy: `NEXT_PUBLIC_GOOGLE_PLACE_ID`. Las de Supabase (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RESTAURANT_SLUG`) son opcionales por ahora — solo hacen falta si se reconecta el sistema de reservas propio (ver "Reservas (Meitre)"). La URL de Meitre está hardcodeada en `src/lib/meitre.ts`, no es una env var.
+
