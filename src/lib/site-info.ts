@@ -7,9 +7,8 @@
  *
  * Pendiente de Juani (ver PLAN.md sección 13):
  * - WHATSAPP_NUMBER: número real de WhatsApp del restaurante.
- * - ADDRESS_TEXT: dirección textual (hoy solo tenemos coordenadas, que sí
- *   están confirmadas — ver GOOGLE_MAPS_COORDS).
- * - HORARIOS: horario de atención real.
+ *
+ * Confirmados por Juani el 17/09/2026: ADDRESS_TEXT y HORARIOS.
  */
 
 // Confirmado: extraído de la URL pública de Google Maps del lugar
@@ -23,8 +22,14 @@ export const GOOGLE_MAPS_EMBED_URL = `https://www.google.com/maps?q=${GOOGLE_MAP
 
 // Pendiente — no inventar. Completar cuando Juani lo confirme.
 export const WHATSAPP_NUMBER: string | null = null;
-export const ADDRESS_TEXT: string | null = null;
-export const HORARIOS: string | null = null;
+
+// Confirmado por Juani el 17/09/2026.
+export const ADDRESS_TEXT: string | null =
+  "Rbla. Dr. Claudio Williman 22, 20100 Punta del Este, Departamento de Maldonado, Uruguay";
+
+// Confirmado por Juani el 17/09/2026.
+export const HORARIOS: string | null =
+  "Invierno: de 10:00 a 00:00. Verano: horario extendido, hasta las 2:00.";
 
 export function whatsappLink(message?: string): string | null {
   if (!WHATSAPP_NUMBER) return null;
