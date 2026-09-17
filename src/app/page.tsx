@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { SiteNav } from "@/components/nav";
 import { MoodCarousel } from "@/components/mood-carousel";
@@ -8,39 +9,58 @@ import { MEITRE_RESERVATION_URL } from "@/lib/meitre";
 export default function HomePage() {
   return (
     <main className="flex-1">
-      {/* HERO */}
-      <section className="relative flex min-h-[92vh] items-end overflow-hidden bg-navy">
-        <SiteNav />
+      {/* HERO — pedido explícito del cliente: layout centrado tipo
+          gardiner.com.ar / kansasgrillandbar.com.ar (foto de fondo a pantalla
+          completa, marca centrada con líneas a los costados, botón
+          "Reservar" con solo borde, sin relleno). El isotipo real de Muelle 3
+          es texto negro sobre fondo blanco semi-transparente (no una marca
+          blanca de líneas como la de esas referencias), así que va sobre una
+          tarjeta blanca opaca para que se lea bien contra cualquier foto —
+          nunca inventamos una versión "en blanco" del logo que no existe. */}
+      <section className="relative flex min-h-[92vh] items-center justify-center overflow-hidden bg-navy">
+        <SiteNav hideLogo />
         <MoodCarousel />
-        {/* Un solo scrim, solo abajo, donde está el texto — las fotos reales
-            (atardecer, aéreo del muelle) son buenas y no hay que apagarlas
-            con capas de oscuro encima. */}
-        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/25 to-transparent" />
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-20">
-          <p className="mb-4 text-sm font-semibold tracking-[0.25em] text-amber uppercase">
-            Kitchen & Bar · Playa Mansa, Punta del Este
-          </p>
-          <h1 className="max-w-xl font-serif text-5xl leading-[1.05] font-semibold text-white sm:text-6xl md:text-7xl">
-            Frente al mar,
-            <br />
-            con los pies en la arena.
-          </h1>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <a
-              href={MEITRE_RESERVATION_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-md bg-mustard px-7 py-3.5 font-semibold text-navy shadow-lg shadow-mustard/20 transition hover:brightness-95"
-            >
-              Reservar una mesa
-            </a>
-            <Link
-              href="/menu"
-              className="rounded-md bg-white/10 px-7 py-3.5 font-semibold text-white ring-1 ring-white/50 backdrop-blur-sm transition hover:bg-white hover:text-navy"
-            >
-              Ver el menú
-            </Link>
+        {/* Oscurece un poco toda la foto para que la marca y la línea blanca
+            tengan contraste parejo, más un viñeteado suave centrado detrás
+            del contenido — las fotos reales siguen siendo protagonistas, no
+            se tapan con una capa oscura plana como antes. */}
+        <div className="absolute inset-0 bg-navy/25" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 55% at 50% 52%, rgba(13,26,38,0.55) 0%, rgba(13,26,38,0.18) 60%, transparent 100%)",
+          }}
+        />
+
+        <div className="relative z-10 mx-auto flex w-full max-w-2xl flex-col items-center px-6 text-center">
+          <div className="mb-9 flex w-full items-center justify-center gap-5 sm:gap-8">
+            <span className="hidden h-px flex-1 bg-white/50 sm:block" />
+            <div className="shrink-0 rounded-sm bg-white p-3 shadow-2xl sm:p-4">
+              <Image
+                src="/images/logo-cropped.png"
+                alt="Muelle 3 — Kitchen & Bar"
+                width={220}
+                height={220}
+                className="h-24 w-24 sm:h-32 sm:w-32"
+                priority
+              />
+            </div>
+            <span className="hidden h-px flex-1 bg-white/50 sm:block" />
           </div>
+
+          <p className="mb-8 text-xs font-semibold tracking-[0.3em] text-white/85 uppercase sm:text-sm">
+            Playa Mansa · Punta del Este
+          </p>
+
+          <a
+            href={MEITRE_RESERVATION_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="border border-white/80 px-10 py-3.5 text-xs font-semibold tracking-[0.25em] text-white uppercase transition hover:bg-white hover:text-navy sm:text-sm"
+          >
+            Reservar
+          </a>
         </div>
       </section>
 
