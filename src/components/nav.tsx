@@ -39,14 +39,21 @@ export function SiteNav() {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-navy/60 to-transparent" />
 
       <div className="relative mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-          <div className="rounded bg-white p-1.5">
+        <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
+          {/* El archivo original (logo-real.png) tiene el isotipo cuadrado
+              centrado en un lienzo 2:1 con muchísimo margen transparente a
+              los costados — al mostrarlo con width/height fijos ese margen
+              se veía como parte del logo, achicándolo hasta ser illegible.
+              logo-cropped.png es el mismo isotipo real, recortado a ese
+              cuadrado. El fondo blanco es necesario: el PNG es transparente
+              y sin respaldo se mezcla con la foto de atrás. */}
+          <div className="rounded-md bg-white p-2 shadow-md">
             <Image
-              src="/images/logo-real.png"
+              src="/images/logo-cropped.png"
               alt="Muelle 3 — Kitchen & Bar"
-              width={110}
-              height={48}
-              className="h-9 w-auto"
+              width={116}
+              height={116}
+              className="h-11 w-11 sm:h-12 sm:w-12"
               priority
             />
           </div>

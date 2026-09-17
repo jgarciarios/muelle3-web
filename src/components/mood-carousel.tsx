@@ -65,7 +65,7 @@ export function MoodCarousel() {
               alt={mood.alt}
               fill
               priority={i === 0}
-              className="object-cover opacity-70"
+              className="object-cover"
             />
           ) : (
             <div className="absolute inset-0 bg-navy">

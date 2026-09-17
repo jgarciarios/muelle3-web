@@ -12,12 +12,10 @@ export default function HomePage() {
       <section className="relative flex min-h-[92vh] items-end overflow-hidden bg-navy">
         <SiteNav />
         <MoodCarousel />
-        {/* Doble scrim: vertical para que el texto siempre se lea contra el
-            cielo/mar, y un halo radial abajo a la izquierda que refuerza el
-            contraste justo detrás del título sin importar qué foto esté
-            activa. */}
-        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/50 to-navy/10" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_20%_100%,rgba(13,26,38,0.75),transparent)]" />
+        {/* Un solo scrim, solo abajo, donde está el texto — las fotos reales
+            (atardecer, aéreo del muelle) son buenas y no hay que apagarlas
+            con capas de oscuro encima. */}
+        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/25 to-transparent" />
         <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-20">
           <p className="mb-4 text-sm font-semibold tracking-[0.25em] text-amber uppercase">
             Kitchen & Bar · Playa Mansa, Punta del Este
