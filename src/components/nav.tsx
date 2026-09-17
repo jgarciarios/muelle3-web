@@ -87,7 +87,7 @@ export function SiteNav() {
               <Link
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="font-serif text-5xl font-semibold text-white transition hover:text-amber sm:text-6xl"
+                className="font-serif text-4xl leading-tight font-semibold text-white transition hover:text-amber sm:text-6xl"
               >
                 {l.label}
               </Link>
@@ -104,7 +104,7 @@ export function SiteNav() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setOpen(false)}
-              className="font-serif text-5xl font-semibold text-amber transition hover:text-white sm:text-6xl"
+              className="font-serif text-4xl leading-tight font-semibold text-amber transition hover:text-white sm:text-6xl"
             >
               Reservas
             </a>

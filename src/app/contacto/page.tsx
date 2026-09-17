@@ -18,7 +18,7 @@ export default function ContactoPage() {
           <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-mustard uppercase">
             Contacto
           </p>
-          <h1 className="font-serif text-5xl font-semibold text-white sm:text-6xl">
+          <h1 className="font-serif text-4xl leading-tight font-semibold text-white sm:text-6xl">
             Te esperamos en el muelle
           </h1>
         </div>
