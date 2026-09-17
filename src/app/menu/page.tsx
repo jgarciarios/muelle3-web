@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { SiteNav } from "@/components/nav";
+import { MenuCategoryNav } from "@/components/menu-category-nav";
 import { MENU } from "@/lib/menu-data";
 
 export const metadata: Metadata = {
@@ -34,22 +35,11 @@ export default function MenuPage() {
         </div>
       </section>
 
-      {/* NAV DE CATEGORÍAS (ancla) — look tipo "tabs", inspirado en la
-          referencia que mandó Juani (tucsonrestaurante.com). */}
-      <nav className="sticky top-0 z-10 overflow-x-auto border-b border-ink/10 bg-white/95 backdrop-blur">
-        <ul className="mx-auto flex max-w-6xl gap-8 px-6 py-4 whitespace-nowrap font-mono">
-          {MENU.map((cat) => (
-            <li key={cat.id}>
-              <a
-                href={`#${cat.id}`}
-                className="text-xs font-semibold tracking-[0.1em] text-ink-muted uppercase transition hover:text-celeste-deep"
-              >
-                {cat.titulo}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      {/* NAV DE CATEGORÍAS (ancla) — tira scrolleable con degradé sutil en
+          los bordes y el rubro activo resaltado a medida que se hace
+          scroll por la página. Ver comentario completo en
+          menu-category-nav.tsx: a pedido de Juani, no es un buscador. */}
+      <MenuCategoryNav categorias={MENU.map(({ id, titulo }) => ({ id, titulo }))} />
 
       {/* CATEGORÍAS — nombres en mayúscula, color de marca, líneas
           divisorias finas y grilla de 3 columnas: mismo espíritu que la
