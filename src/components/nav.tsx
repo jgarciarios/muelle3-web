@@ -7,7 +7,7 @@ import { MEITRE_RESERVATION_URL } from "@/lib/meitre";
 
 const links = [
   { href: "/menu", label: "Menú" },
-  { href: "/historia", label: "Nuestra Historia" },
+  { href: "/historia", label: "Historia" },
   { href: "/eventos", label: "Eventos" },
   { href: "/resenas", label: "Reseñas" },
   { href: "/contacto", label: "Contacto" },
@@ -92,7 +92,7 @@ export function SiteNav() {
           ✕
         </button>
 
-        <ul className="mx-auto w-full max-w-md space-y-4">
+        <ul className="mx-auto w-full max-w-md space-y-3 sm:space-y-4 md:space-y-5">
           {links.map((l, i) => (
             <li
               key={l.href}
@@ -104,14 +104,14 @@ export function SiteNav() {
               <Link
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="font-serif text-4xl leading-tight font-semibold text-white transition hover:text-amber sm:text-6xl"
+                className="font-serif text-3xl leading-none font-semibold text-white transition hover:text-amber sm:text-4xl md:text-5xl"
               >
                 {l.label}
               </Link>
             </li>
           ))}
           <li
-            className={`transition-all duration-400 ease-out ${
+            className={`mt-2 border-t border-white/10 pt-4 transition-all duration-400 ease-out sm:mt-3 sm:pt-5 ${
               open ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
             }`}
             style={{ transitionDelay: open ? `${80 + links.length * 60}ms` : "0ms" }}
@@ -121,7 +121,7 @@ export function SiteNav() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setOpen(false)}
-              className="font-serif text-4xl leading-tight font-semibold text-amber transition hover:text-white sm:text-6xl"
+              className="font-serif text-3xl leading-none font-semibold text-amber transition hover:text-white sm:text-4xl md:text-5xl"
             >
               Reservas
             </a>
