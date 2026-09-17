@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { SiteNav } from "@/components/nav";
 import { MENU } from "@/lib/menu-data";
 
@@ -9,14 +10,27 @@ export const metadata: Metadata = {
 export default function MenuPage() {
   return (
     <main className="flex-1 bg-white">
-      {/* HERO */}
-      <section className="relative flex min-h-[40vh] flex-col items-center justify-center overflow-hidden bg-navy px-6 text-center">
+      {/* HERO — foto real de la terraza de fondo (mismo criterio que el
+          Home: nunca fotos de stock, solo fotos reales ya confirmadas).
+          Cuando lleguen fotos de platos, esta sección puede sumar una
+          galería propia; por ahora usa lo que ya tenemos. */}
+      <section className="relative flex min-h-[45vh] flex-col items-center justify-center overflow-hidden bg-navy px-6 text-center">
         <SiteNav />
+        <Image
+          src="/images/terraza.png"
+          alt=""
+          fill
+          priority
+          className="object-cover opacity-40"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/70 to-navy/30" />
         <div className="relative z-10 max-w-xl">
           <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-mustard uppercase">
             Kitchen & Bar
           </p>
-          <h1 className="font-serif text-4xl leading-tight font-semibold text-white sm:text-6xl">Nuestro menú</h1>
+          <h1 className="font-serif text-4xl leading-tight font-semibold text-white sm:text-6xl">
+            Nuestro menú
+          </h1>
           <p className="mt-4 text-celeste-pale">
             Cocina con identidad, ingredientes frescos y locales, frente al mar.
           </p>
@@ -40,7 +54,7 @@ export default function MenuPage() {
       </nav>
 
       {/* CATEGORÍAS */}
-      <div className="mx-auto max-w-4xl px-6 py-16">
+      <div className="mx-auto max-w-5xl px-6 py-16">
         {MENU.map((cat, i) => (
           <section
             key={cat.id}
@@ -48,9 +62,9 @@ export default function MenuPage() {
             className={`scroll-mt-16 ${i > 0 ? "mt-16 border-t border-ink/10 pt-16" : ""}`}
           >
             <h2 className="mb-8 font-serif text-3xl font-bold text-ink">{cat.titulo}</h2>
-            <ul className="space-y-6">
+            <ul className="grid gap-x-10 gap-y-6 sm:grid-cols-2">
               {cat.items.map((item) => (
-                <li key={item.nombre}>
+                <li key={item.nombre} className="border-b border-ink/5 pb-4">
                   <p className="font-semibold text-ink">{item.nombre}</p>
                   {item.descripcion && (
                     <p className="mt-1 text-sm leading-relaxed text-ink-muted">{item.descripcion}</p>
@@ -58,9 +72,7 @@ export default function MenuPage() {
                 </li>
               ))}
             </ul>
-            {cat.nota && (
-              <p className="mt-6 text-sm italic text-ink-muted">{cat.nota}</p>
-            )}
+            {cat.nota && <p className="mt-6 text-sm italic text-ink-muted">{cat.nota}</p>}
           </section>
         ))}
       </div>
