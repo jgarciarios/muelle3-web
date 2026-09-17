@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Caveat } from "next/font/google";
+import { Inter, Caveat, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -16,6 +16,16 @@ const caveat = Caveat({
   weight: ["500", "600", "700"],
 });
 
+// Tipografía monoespaciada para el contenido del Menú (platos/tragos),
+// inspirada en la referencia que mandó Juani (tucsonrestaurante.com,
+// 17/09/2026): nombres en mayúscula, look prolijo tipo "ficha técnica".
+// Se usa SOLO dentro de /menu, no reemplaza a Inter en el resto del sitio.
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+});
+
 export const metadata: Metadata = {
   title: "Muelle 3 — Kitchen & Bar | Playa Mansa, Punta del Este",
   description:
@@ -26,7 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="es"
-      className={`${inter.variable} ${caveat.variable} h-full antialiased`}
+      className={`${inter.variable} ${caveat.variable} ${plexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">{children}</body>
     </html>

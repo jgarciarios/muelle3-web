@@ -14,7 +14,7 @@ export default function MenuPage() {
           Home: nunca fotos de stock, solo fotos reales ya confirmadas).
           Cuando lleguen fotos de platos, esta sección puede sumar una
           galería propia; por ahora usa lo que ya tenemos. */}
-      <section className="relative flex min-h-[45vh] flex-col items-center justify-center overflow-hidden bg-navy px-6 text-center">
+      <section className="relative flex min-h-[40vh] flex-col items-center justify-center overflow-hidden bg-navy px-6 text-center">
         <SiteNav />
         <Image
           src="/images/terraza.png"
@@ -31,20 +31,18 @@ export default function MenuPage() {
           <h1 className="font-serif text-4xl leading-tight font-semibold text-white sm:text-6xl">
             Nuestro menú
           </h1>
-          <p className="mt-4 text-celeste-pale">
-            Cocina con identidad, ingredientes frescos y locales, frente al mar.
-          </p>
         </div>
       </section>
 
-      {/* NAV DE CATEGORÍAS (ancla) */}
+      {/* NAV DE CATEGORÍAS (ancla) — look tipo "tabs", inspirado en la
+          referencia que mandó Juani (tucsonrestaurante.com). */}
       <nav className="sticky top-0 z-10 overflow-x-auto border-b border-ink/10 bg-white/95 backdrop-blur">
-        <ul className="mx-auto flex max-w-6xl gap-6 px-6 py-3 whitespace-nowrap">
+        <ul className="mx-auto flex max-w-6xl gap-8 px-6 py-4 whitespace-nowrap font-mono">
           {MENU.map((cat) => (
             <li key={cat.id}>
               <a
                 href={`#${cat.id}`}
-                className="text-sm font-semibold text-ink-muted transition hover:text-celeste-deep"
+                className="text-xs font-semibold tracking-[0.1em] text-ink-muted uppercase transition hover:text-celeste-deep"
               >
                 {cat.titulo}
               </a>
@@ -53,26 +51,37 @@ export default function MenuPage() {
         </ul>
       </nav>
 
-      {/* CATEGORÍAS */}
-      <div className="mx-auto max-w-5xl px-6 py-16">
+      {/* CATEGORÍAS — nombres en mayúscula, color de marca, líneas
+          divisorias finas y grilla de 3 columnas: mismo espíritu que la
+          referencia, con la paleta celeste/mustard de Muelle 3 en vez de
+          copiar sus colores. */}
+      <div className="mx-auto max-w-6xl px-6 py-16 font-mono">
         {MENU.map((cat, i) => (
-          <section
-            key={cat.id}
-            id={cat.id}
-            className={`scroll-mt-16 ${i > 0 ? "mt-16 border-t border-ink/10 pt-16" : ""}`}
-          >
-            <h2 className="mb-8 font-serif text-3xl font-bold text-ink">{cat.titulo}</h2>
-            <ul className="grid gap-x-10 gap-y-6 sm:grid-cols-2">
+          <section key={cat.id} id={cat.id} className={`scroll-mt-16 ${i > 0 ? "mt-16" : ""}`}>
+            <h2 className="text-2xl font-bold tracking-[0.04em] text-celeste-deep uppercase">
+              {cat.titulo}
+            </h2>
+            <div className="mt-3 mb-8 h-px w-full bg-ink/15" />
+
+            <ul className="grid gap-x-10 gap-y-8 lg:grid-cols-3">
               {cat.items.map((item) => (
-                <li key={item.nombre} className="border-b border-ink/5 pb-4">
-                  <p className="font-semibold text-ink">{item.nombre}</p>
+                <li key={item.nombre}>
+                  <p className="text-sm font-bold tracking-[0.03em] text-ink uppercase">
+                    {item.nombre}
+                  </p>
                   {item.descripcion && (
-                    <p className="mt-1 text-sm leading-relaxed text-ink-muted">{item.descripcion}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-ink-muted normal-case">
+                      {item.descripcion}
+                    </p>
                   )}
                 </li>
               ))}
             </ul>
-            {cat.nota && <p className="mt-6 text-sm italic text-ink-muted">{cat.nota}</p>}
+            {cat.nota && (
+              <p className="mt-8 text-xs leading-relaxed text-ink-muted normal-case italic">
+                {cat.nota}
+              </p>
+            )}
           </section>
         ))}
       </div>
