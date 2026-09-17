@@ -224,10 +224,10 @@ Juani tiene Claude Code disponible como respaldo si algo falla en este entorno (
 
 **Recordatorio permanente:** en cada turno de esta conversación, si alguno de estos puntos sigue sin resolverse, hay que volver a preguntarlo — no dejar que se pierda.
 
-- [ ] **Carta del menú** (texto, sin precios). Comprometido para 2-3 días desde el 16/09.
-- [ ] **Texto básico de Nuestra Historia** (año de apertura, mención del mural de Páez Vilaró, nombres del equipo). Mismo compromiso de 2-3 días.
-- [ ] **Dirección de mail para el aviso de cotizaciones de Eventos** (`EVENTOS_NOTIFICATION_EMAIL`) — Juani dijo que todavía no la tiene, la manda en cuanto la consiga. El formulario ya funciona y guarda en base sin esto; solo falta para que llegue el aviso por mail.
-- [ ] **Carpeta/Drive de fotos** — Juani va a mandarla más adelante, no se apura. Cuando llegue: reemplazar assets de Menú/Historia/Eventos que hoy son solo tipografía/color.
+- [x] **Carta del menú** (texto, sin precios) — RECIBIDA el 16/09 como "Carta 2026.pdf". Contenido completo extraído: Entradas, Pizzas, Sandwiches, Ensaladas, Principales (chef ejecutivo Javier Carballo), Postres, Bebidas/Cervezas/Ponches/Limonadas/Detox, Classic Cocktails + Cocktails de Autor, Desayuno & Tarde, Cafetería. Falta construir la página `/menu` con esto (sin mostrar precios, por la decisión ya tomada).
+- [x] **Texto básico de Nuestra Historia** — RECIBIDO en la misma "Carta 2026.pdf" (página 1, "NUESTRA HISTORIA"): origen en la vieja cantina del Club de Pesca en la Parada 3 de La Mansa, mural de Carlos Páez Vilaró (una sirena, restaurada en 1996 para la inauguración). Falta construir la página `/historia` con esto — confirmar con Juani si se usa tal cual (es texto propio del cliente, no de terceros) o se reescribe.
+- [ ] **Dirección de mail para el aviso de cotizaciones de Eventos** (`EVENTOS_NOTIFICATION_EMAIL`) — la misma Carta 2026.pdf menciona `muelle3pde@gmail.com` como mail de contacto para eventos. Es un candidato fuerte, pero **no se aplicó todavía** — falta confirmación explícita de Juani antes de usarlo (regla: no inventar/asumir datos del cliente).
+- [ ] **Carpeta de Drive de fotos** ("FOTOS JUL 26", carpeta compartida el 16/09) — **bloqueada**: la carpeta se confirma accesible (`get_file_metadata` la ve, dueño `contenidovitti@gmail.com`), pero `search_files` con filtro `parentId` devuelve vacío en 4 intentos distintos, y tampoco aparece en `list_recent_files`. No se pudo listar ni un archivo dentro. Posible demora de indexación por lo reciente del share, o alguna limitación de permisos de la carpeta. Pendiente: pedirle a Juani que abra la carpeta él mismo y comparta 2-3 links de archivos individuales como prueba, o esperar y reintentar.
 - [ ] **Número de WhatsApp real** (Reservas/Eventos/Contacto) — hoy el bloque de WhatsApp en `/contacto` está oculto (`WHATSAPP_NUMBER = null` en `src/lib/site-info.ts`) hasta tener el número real.
 - [ ] **Dirección textual y horarios** para `/contacto` (`ADDRESS_TEXT`, `HORARIOS` en `src/lib/site-info.ts`, hoy vacíos).
 - [ ] **Proyecto de Google Cloud con billing activo** para Places API (reviews reales) — Juani eligió activarlo antes del lanzamiento del 1° de octubre (ver sección 11). Sin esto, el carrusel de reseñas no puede salir de "vista previa" y no se puede lanzar públicamente con reviews de ejemplo.
@@ -236,6 +236,7 @@ Juani tiene Claude Code disponible como respaldo si algo falla en este entorno (
 - [ ] Cómo y cuándo se re-cotiza la Fase 2 (Sponsors/Agenda/Galería) con los dueños (sección 9).
 - [ ] Nombre final de la sección "Nuestra Historia" vs. "El Muelle" (¿se fusionan, o quedan separadas más adelante?).
 - [ ] Nombre de dominio propio a conectar en Vercel antes del lanzamiento.
+- [ ] **Preguntar a los dueños en la llamada: orden de las reviews reales de Google.** La API solo devuelve un máximo de 5 reviews (tope de Google, no editable) y solo permite elegir el ORDEN, no cuáles aparecen: `most_relevant` (el mismo criterio/algoritmo que usa Google Maps por default — mezcla utilidad, detalle y calidad, NO es "usuarios con más reseñas dadas" como criterio separado) o `newest` (las 5 últimas por fecha, sin filtrar por calidad). Definir cuál prefieren antes de conectar la Places API real.
 
 ## 14. Dónde está cada cosa (mapa de archivos clave)
 
