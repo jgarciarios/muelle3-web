@@ -101,8 +101,18 @@ export function ReviewsCarousel({
         </p>
       </div>
 
+      {/* Una tarjeta a la vez, a todos los anchos de pantalla. Antes cada
+          tarjeta ocupaba 100%/50%/33% del contenedor según el breakpoint,
+          pero el desplazamiento siempre se calculaba como "índice × 100%"
+          — pensado para una sola tarjeta por pantalla. En desktop (3
+          tarjetas visibles de 33% cada una) eso corría el carrusel mucho
+          más de lo que medía su contenido real: al llegar a la última
+          reseña quedaba todo desplazado fuera de la vista, dejando un
+          hueco en blanco donde deberían verse las tarjetas. Con una sola
+          tarjeta por vez el cálculo "índice × 100%" es siempre correcto,
+          sin importar el ancho de pantalla. */}
       <div
-        className="relative"
+        className="relative mx-auto max-w-xl"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         onFocus={() => setPaused(true)}
@@ -114,7 +124,7 @@ export function ReviewsCarousel({
             style={{ transform: `translateX(-${index * 100}%)` }}
           >
             {reviews.map((review, i) => (
-              <div key={i} className="w-full shrink-0 px-2 sm:w-1/2 sm:px-3 lg:w-1/3">
+              <div key={i} className="w-full shrink-0 px-2">
                 <ReviewCard review={review} />
               </div>
             ))}
