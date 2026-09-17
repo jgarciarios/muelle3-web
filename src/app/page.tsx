@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { SiteNav } from "@/components/nav";
 import { MoodCarousel } from "@/components/mood-carousel";
+import { GalleryPhoto } from "@/components/gallery-photo";
 import { ReviewsCarousel } from "@/components/reviews-carousel";
 import { MEITRE_RESERVATION_URL } from "@/lib/meitre";
 
@@ -12,26 +12,33 @@ export default function HomePage() {
       <section className="relative flex min-h-[92vh] items-end overflow-hidden bg-navy">
         <SiteNav />
         <MoodCarousel />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/40 to-transparent" />
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-16">
-          <p className="mb-3 text-sm font-semibold tracking-[0.2em] text-amber uppercase">
+        {/* Doble scrim: vertical para que el texto siempre se lea contra el
+            cielo/mar, y un halo radial abajo a la izquierda que refuerza el
+            contraste justo detrás del título sin importar qué foto esté
+            activa. */}
+        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/50 to-navy/10" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_20%_100%,rgba(13,26,38,0.75),transparent)]" />
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-20">
+          <p className="mb-4 text-sm font-semibold tracking-[0.25em] text-amber uppercase">
             Kitchen & Bar · Playa Mansa, Punta del Este
           </p>
-          <h1 className="max-w-2xl font-serif text-4xl leading-tight font-semibold text-white sm:text-6xl md:text-7xl">
-            Frente al mar, con los pies en la arena.
+          <h1 className="max-w-xl font-serif text-5xl leading-[1.05] font-semibold text-white sm:text-6xl md:text-7xl">
+            Frente al mar,
+            <br />
+            con los pies en la arena.
           </h1>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-9 flex flex-wrap gap-3">
             <a
               href={MEITRE_RESERVATION_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-md bg-mustard px-6 py-3 font-semibold text-navy transition hover:brightness-95"
+              className="rounded-md bg-mustard px-7 py-3.5 font-semibold text-navy shadow-lg shadow-mustard/20 transition hover:brightness-95"
             >
               Reservar una mesa
             </a>
             <Link
               href="/menu"
-              className="rounded-md border border-white/40 px-6 py-3 font-semibold text-white transition hover:bg-white/10"
+              className="rounded-md bg-white/10 px-7 py-3.5 font-semibold text-white ring-1 ring-white/50 backdrop-blur-sm transition hover:bg-white hover:text-navy"
             >
               Ver el menú
             </Link>
@@ -51,32 +58,27 @@ export default function HomePage() {
         </p>
       </section>
 
-      {/* GALERÍA REAL */}
-      <section className="mx-auto grid max-w-6xl grid-cols-1 gap-4 px-6 pb-20 sm:grid-cols-3">
-        <div className="relative aspect-[4/5] overflow-hidden rounded-lg sm:col-span-2 sm:row-span-2 sm:aspect-auto">
-          <Image
-            src="/images/terraza.png"
-            alt="Terraza de Muelle 3"
-            fill
-            className="object-cover"
-          />
-        </div>
-        <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
-          <Image
-            src="/images/fachada-dia-hq.png"
-            alt="Fachada de Muelle 3 de día"
-            fill
-            className="object-cover"
-          />
-        </div>
-        <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
-          <Image
-            src="/images/equipo-real.png"
-            alt="El equipo de Muelle 3"
-            fill
-            className="object-cover"
-          />
-        </div>
+      {/* GALERÍA REAL — cada foto con caption y overlay al hover, en vez de
+          un grid plano sin jerarquía. */}
+      <section className="mx-auto grid max-w-6xl grid-cols-1 gap-4 px-6 pb-20 sm:grid-cols-3 sm:grid-rows-2">
+        <GalleryPhoto
+          src="/images/terraza.png"
+          alt="Terraza de Muelle 3"
+          caption="La terraza"
+          className="aspect-[4/5] sm:col-span-2 sm:row-span-2 sm:aspect-auto"
+        />
+        <GalleryPhoto
+          src="/images/fachada-dia-hq.png"
+          alt="Fachada de Muelle 3 de día"
+          caption="El muelle, de día"
+          className="aspect-[4/3]"
+        />
+        <GalleryPhoto
+          src="/images/equipo-real.png"
+          alt="El equipo de Muelle 3"
+          caption="Nuestro equipo"
+          className="aspect-[4/3]"
+        />
       </section>
 
       {/* RESEÑAS (vista previa — ver comentario en reviews-carousel.tsx) */}

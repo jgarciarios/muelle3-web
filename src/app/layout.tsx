@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Caveat, IBM_Plex_Mono } from "next/font/google";
+import { Inter, Fraunces, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -7,13 +7,14 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-// Tipografía manuscrita/casual para títulos grandes (decisión de Juani,
-// 17/09/2026, en base a una referencia visual que mandó). Reemplaza a
-// Fraunces. El cuerpo de texto sigue en Inter para mantener legibilidad.
-const caveat = Caveat({
+// Serif editorial para títulos grandes (decisión de Juani, 18/09/2026:
+// se probó una cursiva manuscrita y no funcionó para frases largas —
+// se vuelve a un serif fuerte, sin itálica, look "restaurante de autor").
+const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
   weight: ["500", "600", "700"],
+  style: ["normal"],
 });
 
 // Tipografía monoespaciada para el contenido del Menú (platos/tragos),
@@ -36,7 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="es"
-      className={`${inter.variable} ${caveat.variable} ${plexMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${fraunces.variable} ${plexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">{children}</body>
     </html>

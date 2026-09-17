@@ -15,6 +15,9 @@ type Mood = {
   alt: string;
 };
 
+// Solo moods con foto real (nunca stock ni un fondo de color "de relleno" —
+// eso se veía como un bache feo en el carousel). Cuando llegue una foto
+// real de noche, se agrega un tercer mood acá.
 const MOODS: Mood[] = [
   {
     id: "dia",
@@ -27,14 +30,6 @@ const MOODS: Mood[] = [
     label: "Atardecer",
     src: "/images/fachada-atardecer-hq.png",
     alt: "Fachada de Muelle 3 al atardecer, cartel retroiluminado contra el cielo",
-  },
-  {
-    id: "noche",
-    // Sin foto real todavía (pendiente — ver PLAN.md). Se muestra el mood
-    // de color de la marca en vez de una foto inventada.
-    label: "Noche",
-    src: null,
-    alt: "",
   },
 ];
 
