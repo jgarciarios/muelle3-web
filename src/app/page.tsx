@@ -92,82 +92,103 @@ export default function HomePage() {
           un ñoqui con estofado, un plato salado). Antes de usar cualquiera
           de estos archivos hay que abrirlo y mirar la foto real, nunca
           confiar en el nombre. */}
-      <Reveal>
+      {/* Cada foto entra con su propio fade + slide, escalonada (delay
+          creciente) a medida que aparece en pantalla — antes todo el
+          bloque tenía un solo Reveal, así que las fotos "aparecían" todas
+          juntas de golpe apenas se cargaba la sección y no se notaba como
+          un efecto sobre las fotos en sí. Así sí se ve, foto por foto. */}
       <section className="bg-navy py-20">
         <div className="mx-auto max-w-6xl px-6">
-          <div className="mb-10 text-center">
-            <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-mustard uppercase">
-              De nuestra cocina
-            </p>
-            <h2 className="font-serif text-3xl font-bold text-white">Platos que hablan solos</h2>
-          </div>
+          <Reveal>
+            <div className="mb-10 text-center">
+              <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-mustard uppercase">
+                De nuestra cocina
+              </p>
+              <h2 className="font-serif text-3xl font-bold text-white">Platos que hablan solos</h2>
+            </div>
+          </Reveal>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:grid-rows-2">
-            <GalleryPhoto
-              src="/images/platos/pasta-mariscos.jpg"
-              alt="Fettuccine Gorriti con langostinos y mejillones"
-              caption="Fettuccine Gorriti"
-              className="aspect-[4/5] sm:col-span-2 sm:row-span-2 sm:aspect-auto"
-            />
-            <GalleryPhoto
-              src="/images/platos/mila-del-muelle.jpg"
-              alt="Mila del Muelle con papas fritas"
-              caption="Mila del Muelle"
-              className="aspect-[4/5]"
-            />
+            <Reveal delay={0} className="aspect-[4/5] sm:col-span-2 sm:row-span-2 sm:aspect-auto">
+              <GalleryPhoto
+                src="/images/platos/pasta-mariscos.jpg"
+                alt="Fettuccine Gorriti con langostinos y mejillones"
+                caption="Fettuccine Gorriti"
+                className="h-full"
+              />
+            </Reveal>
+            <Reveal delay={100} className="aspect-[4/5]">
+              <GalleryPhoto
+                src="/images/platos/mila-del-muelle.jpg"
+                alt="Mila del Muelle con papas fritas"
+                caption="Mila del Muelle"
+                className="h-full"
+              />
+            </Reveal>
             {/* Pese al nombre de archivo ("cheesecake-detalle.jpg"), esta foto
                 es el costillar con puré — verificado abriendo la imagen. */}
-            <GalleryPhoto
-              src="/images/platos/cheesecake-detalle.jpg"
-              alt="Costillar angus braseado con puré"
-              caption="Costillar angus braseado"
-              className="aspect-[4/5]"
-            />
+            <Reveal delay={200} className="aspect-[4/5]">
+              <GalleryPhoto
+                src="/images/platos/cheesecake-detalle.jpg"
+                alt="Costillar angus braseado con puré"
+                caption="Costillar angus braseado"
+                className="h-full"
+              />
+            </Reveal>
           </div>
 
           <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <GalleryPhoto
-              src="/images/platos/flan-dulce-de-leche.jpg"
-              alt="Flan de dulce de leche con pochoclo caramelizado"
-              caption="Flan de dulce de leche"
-              className="aspect-[4/5]"
-            />
-            <GalleryPhoto
-              src="/images/platos/cheesecake-frutos-rojos.jpg"
-              alt="Cheesecake con frutos rojos"
-              caption="Cheesecake de frutos rojos"
-              className="aspect-[4/5]"
-            />
+            <Reveal delay={0} className="aspect-[4/5]">
+              <GalleryPhoto
+                src="/images/platos/flan-dulce-de-leche.jpg"
+                alt="Flan de dulce de leche con pochoclo caramelizado"
+                caption="Flan de dulce de leche"
+                className="h-full"
+              />
+            </Reveal>
+            <Reveal delay={90} className="aspect-[4/5]">
+              <GalleryPhoto
+                src="/images/platos/cheesecake-frutos-rojos.jpg"
+                alt="Cheesecake con frutos rojos"
+                caption="Cheesecake de frutos rojos"
+                className="h-full"
+              />
+            </Reveal>
             {/* Pese al nombre de archivo ("cheesecake-plato.jpg"), esta foto
                 es un risotto de hongos — verificado abriendo la imagen. */}
-            <GalleryPhoto
-              src="/images/platos/cheesecake-plato.jpg"
-              alt="Risotto de hongos"
-              caption="Risotto de hongos"
-              className="aspect-[4/5]"
-            />
+            <Reveal delay={180} className="aspect-[4/5]">
+              <GalleryPhoto
+                src="/images/platos/cheesecake-plato.jpg"
+                alt="Risotto de hongos"
+                caption="Risotto de hongos"
+                className="h-full"
+              />
+            </Reveal>
             {/* Foto real de la mesa con varios platos a la vez — por eso el
                 caption genérico "Para compartir" en vez de nombrar un plato
                 puntual de la carta. */}
-            <GalleryPhoto
-              src="/images/platos/costillar-angus.jpg"
-              alt="Mesa con variedad de platos de Muelle 3"
-              caption="Para compartir"
-              className="aspect-[4/5]"
-            />
+            <Reveal delay={270} className="aspect-[4/5]">
+              <GalleryPhoto
+                src="/images/platos/costillar-angus.jpg"
+                alt="Mesa con variedad de platos de Muelle 3"
+                caption="Para compartir"
+                className="h-full"
+              />
+            </Reveal>
           </div>
 
-          <div className="mt-10 text-center">
-            <Link
-              href="/menu"
-              className="inline-block rounded-md border border-white/30 px-7 py-3 font-semibold text-white transition hover:bg-white/10"
-            >
-              Ver el menú completo
-            </Link>
-          </div>
+          <Reveal>
+            <div className="mt-10 text-center">
+              <Link
+                href="/menu"
+                className="inline-block rounded-md border border-white/30 px-7 py-3 font-semibold text-white transition hover:bg-white/10"
+              >
+                Ver el menú completo
+              </Link>
+            </div>
+          </Reveal>
         </div>
       </section>
-      </Reveal>
 
       {/* La galería "La terraza / El muelle de día / Nuestro equipo" que
           estaba acá se sacó por pedido de Juani (quedaba redundante justo

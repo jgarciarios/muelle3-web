@@ -41,3 +41,26 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+/* Zoom lento y continuo ("Ken Burns") sobre las fotos del hero — movimiento
+   ambiental sutil, no un carrusel ni nada llamativo, para que el fondo se
+   sienta vivo apenas se carga la página, sin esperar a que alguien haga
+   scroll. Respeta "reducir movimiento" del sistema (ver abajo). */
+@keyframes ken-burns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+.animate-ken-burns {
+  animation: ken-burns 14s ease-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ken-burns {
+    animation: none;
+  }
+}
