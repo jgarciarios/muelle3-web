@@ -235,6 +235,7 @@ Juani tiene Claude Code disponible como respaldo si algo falla en este entorno (
 - [ ] Definición concreta de "todo el ciclo de vida del desarrollo del software" que pide el gerente (sección 9).
 - [ ] Cómo y cuándo se re-cotiza la Fase 2 (Sponsors/Agenda/Galería) con los dueños (sección 9).
 - [ ] Nombre final de la sección "Nuestra Historia" vs. "El Muelle" (¿se fusionan, o quedan separadas más adelante?).
+- [ ] **Diseño pedido por Juani el 17/09 (feedback sobre gardiner.com.ar y kansasgrillandbar.com.ar):** cuando se encare la página de Eventos, sumar fotos del interior de Muelle 3 y de la cava (ya sacamos la galería "La terraza / El muelle de día / Nuestro equipo" del Home para no repetir fotos del lugar ahí). Cuando se encare Contacto/Horarios, sumar una foto del personal trabajando.
 - [ ] Nombre de dominio propio a conectar en Vercel antes del lanzamiento.
 - [ ] **Preguntar a los dueños en la llamada: orden de las reviews reales de Google.** La API solo devuelve un máximo de 5 reviews (tope de Google, no editable) y solo permite elegir el ORDEN, no cuáles aparecen: `most_relevant` (el mismo criterio/algoritmo que usa Google Maps por default — mezcla utilidad, detalle y calidad, NO es "usuarios con más reseñas dadas" como criterio separado) o `newest` (las 5 últimas por fecha, sin filtrar por calidad). Definir cuál prefieren antes de conectar la Places API real.
 

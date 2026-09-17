@@ -4,6 +4,7 @@ import { SiteNav } from "@/components/nav";
 import { MoodCarousel } from "@/components/mood-carousel";
 import { GalleryPhoto } from "@/components/gallery-photo";
 import { ReviewsCarousel } from "@/components/reviews-carousel";
+import { Reveal } from "@/components/reveal";
 import { MEITRE_RESERVATION_URL } from "@/lib/meitre";
 
 export default function HomePage() {
@@ -65,16 +66,18 @@ export default function HomePage() {
       </section>
 
       {/* INTRO */}
-      <section className="mx-auto max-w-4xl px-6 py-20 text-center">
-        <h2 className="font-serif text-3xl font-bold text-ink">
-          Un lugar con los pies en la arena y la vista al muelle
-        </h2>
-        <p className="mt-5 text-lg leading-relaxed text-ink-muted">
-          Muelle 3 es un restaurante y bar frente al mar en Playa Mansa, a metros del icónico
-          muelle circular de Punta del Este. Cocina con identidad, buena mesa y un lugar que
-          la gente ya eligió miles de veces — ahora también tiene un sitio propio.
-        </p>
-      </section>
+      <Reveal>
+        <section className="mx-auto max-w-4xl px-6 py-20 text-center">
+          <h2 className="font-serif text-3xl font-bold text-ink">
+            Un lugar con los pies en la arena y la vista al muelle
+          </h2>
+          <p className="mt-5 text-lg leading-relaxed text-ink-muted">
+            Muelle 3 es un restaurante y bar frente al mar en Playa Mansa, a metros del icónico
+            muelle circular de Punta del Este. Cocina con identidad, buena mesa y un lugar que
+            la gente ya eligió miles de veces — ahora también tiene un sitio propio.
+          </p>
+        </section>
+      </Reveal>
 
       {/* NUESTRA COCINA — fotos reales de platos (fotógrafo profesional del
           cliente), primera vez que el sitio muestra comida. Los captions con
@@ -89,6 +92,7 @@ export default function HomePage() {
           un ñoqui con estofado, un plato salado). Antes de usar cualquiera
           de estos archivos hay que abrirlo y mirar la foto real, nunca
           confiar en el nombre. */}
+      <Reveal>
       <section className="bg-navy py-20">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mb-10 text-center">
@@ -163,46 +167,34 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      </Reveal>
 
-      {/* GALERÍA REAL — el lugar. Cada foto con caption y overlay al hover,
-          en vez de un grid plano sin jerarquía. */}
-      <section className="mx-auto grid max-w-6xl grid-cols-1 gap-4 px-6 py-20 sm:grid-cols-3 sm:grid-rows-2">
-        <GalleryPhoto
-          src="/images/terraza.png"
-          alt="Terraza de Muelle 3"
-          caption="La terraza"
-          className="aspect-[4/5] sm:col-span-2 sm:row-span-2 sm:aspect-auto"
-        />
-        <GalleryPhoto
-          src="/images/fachada-dia-hq.png"
-          alt="Fachada de Muelle 3 de día"
-          caption="El muelle, de día"
-          className="aspect-[4/3]"
-        />
-        <GalleryPhoto
-          src="/images/equipo-real.png"
-          alt="El equipo de Muelle 3"
-          caption="Nuestro equipo"
-          className="aspect-[4/3]"
-        />
-      </section>
+      {/* La galería "La terraza / El muelle de día / Nuestro equipo" que
+          estaba acá se sacó por pedido de Juani (quedaba redundante justo
+          debajo de "Nuestra Cocina"). Fotos del lugar por dentro y de la
+          cava van a ir en la página de Eventos; una foto del personal
+          trabajando va a ir en Contacto/Horarios — pendiente, ver PLAN.md. */}
 
       {/* RESEÑAS (vista previa — ver comentario en reviews-carousel.tsx) */}
-      <ReviewsCarousel placeId={process.env.NEXT_PUBLIC_GOOGLE_PLACE_ID} />
+      <Reveal>
+        <ReviewsCarousel placeId={process.env.NEXT_PUBLIC_GOOGLE_PLACE_ID} />
+      </Reveal>
 
       {/* CTA RESERVAS */}
-      <section className="bg-celeste-deep py-16 text-center text-white">
-        <h2 className="font-serif text-3xl font-bold">¿Nos hacemos un lugar?</h2>
-        <p className="mt-3 text-celeste-pale">Reservá tu mesa en menos de un minuto.</p>
-        <a
-          href={MEITRE_RESERVATION_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-6 inline-block rounded-md bg-white px-7 py-3 font-semibold text-celeste-deep transition hover:bg-celeste-pale"
-        >
-          Reservar ahora
-        </a>
-      </section>
+      <Reveal>
+        <section className="bg-celeste-deep py-16 text-center text-white">
+          <h2 className="font-serif text-3xl font-bold">¿Nos hacemos un lugar?</h2>
+          <p className="mt-3 text-celeste-pale">Reservá tu mesa en menos de un minuto.</p>
+          <a
+            href={MEITRE_RESERVATION_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-block rounded-md bg-white px-7 py-3 font-semibold text-celeste-deep transition hover:bg-celeste-pale"
+          >
+            Reservar ahora
+          </a>
+        </section>
+      </Reveal>
 
       <footer className="bg-navy py-10 text-center text-sm text-white/60">
         <p>Muelle 3 — Kitchen & Bar · Playa Mansa, Punta del Este</p>
