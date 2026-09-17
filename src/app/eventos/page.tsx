@@ -18,7 +18,7 @@ export default function EventosPage() {
           <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-celeste uppercase">
             Para ocasiones especiales
           </p>
-          <h1 className="font-serif text-4xl font-bold italic text-white sm:text-5xl">
+          <h1 className="font-serif text-5xl font-semibold text-white sm:text-6xl">
             Eventos en Muelle 3
           </h1>
           <p className="mt-4 text-white/70">

@@ -101,7 +101,7 @@ export function ComingSoon({
               {kicker}
             </p>
           )}
-          <h1 className="font-serif text-4xl font-bold italic text-white sm:text-5xl">{title}</h1>
+          <h1 className="font-serif text-5xl font-semibold text-white sm:text-6xl">{title}</h1>
           <p className="mt-4 max-w-md text-white/70">
             {teaser ??
               "Esta sección está en construcción. Mientras tanto, reservá tu mesa o volvé al inicio."}

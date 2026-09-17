@@ -17,7 +17,7 @@ export default function HomePage() {
           <p className="mb-3 text-sm font-semibold tracking-[0.2em] text-amber uppercase">
             Kitchen & Bar · Playa Mansa, Punta del Este
           </p>
-          <h1 className="max-w-2xl font-serif text-4xl italic font-bold text-white sm:text-6xl">
+          <h1 className="max-w-2xl font-serif text-6xl font-semibold text-white sm:text-7xl">
             Frente al mar, con los pies en la arena.
           </h1>
           <div className="mt-8 flex flex-wrap gap-3">

@@ -15,7 +15,7 @@ export default function HistoriaPage() {
           <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-mustard uppercase">
             Desde el muelle
           </p>
-          <h1 className="font-serif text-4xl font-bold italic text-white sm:text-5xl">
+          <h1 className="font-serif text-5xl font-semibold text-white sm:text-6xl">
             Nuestra Historia
           </h1>
         </div>

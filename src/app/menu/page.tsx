@@ -16,7 +16,7 @@ export default function MenuPage() {
           <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-mustard uppercase">
             Kitchen & Bar
           </p>
-          <h1 className="font-serif text-4xl font-bold italic text-white sm:text-5xl">Nuestro menú</h1>
+          <h1 className="font-serif text-5xl font-semibold text-white sm:text-6xl">Nuestro menú</h1>
           <p className="mt-4 text-celeste-pale">
             Cocina con identidad, ingredientes frescos y locales, frente al mar.
           </p>
