@@ -6,7 +6,7 @@ import { GalleryPhoto } from "@/components/gallery-photo";
 import { AmbienceGallery } from "@/components/ambience-gallery";
 import { ReviewsCarousel } from "@/components/reviews-carousel";
 import { Reveal } from "@/components/reveal";
-import { MEITRE_RESERVATION_URL } from "@/lib/meitre";
+import { ReservarButton } from "@/components/reservar-button";
 
 export default function HomePage() {
   return (
@@ -55,14 +55,9 @@ export default function HomePage() {
             Playa Mansa · Punta del Este
           </p>
 
-          <a
-            href={MEITRE_RESERVATION_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="border border-white/80 px-10 py-3.5 text-xs font-semibold tracking-[0.25em] text-white uppercase transition hover:bg-white hover:text-navy sm:text-sm"
-          >
+          <ReservarButton className="border border-white/80 px-10 py-3.5 text-xs font-semibold tracking-[0.25em] text-white uppercase transition hover:bg-white hover:text-navy sm:text-sm">
             Reservar
-          </a>
+          </ReservarButton>
         </div>
       </section>
 
@@ -234,14 +229,9 @@ export default function HomePage() {
         <section className="bg-celeste-deep py-16 text-center text-white">
           <h2 className="font-serif text-3xl font-bold">¿Nos hacemos un lugar?</h2>
           <p className="mt-3 text-celeste-pale">Reservá tu mesa en menos de un minuto.</p>
-          <a
-            href={MEITRE_RESERVATION_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-block rounded-md bg-white px-7 py-3 font-semibold text-celeste-deep transition hover:bg-celeste-pale"
-          >
+          <ReservarButton className="mt-6 rounded-md bg-white px-7 py-3 font-semibold text-celeste-deep transition hover:bg-celeste-pale">
             Reservar ahora
-          </a>
+          </ReservarButton>
         </section>
       </Reveal>
 
