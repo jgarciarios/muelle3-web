@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Fraunces, IBM_Plex_Mono } from "next/font/google";
+import { PageTransition } from "@/components/page-transition";
 import "./globals.css";
 
 const inter = Inter({
@@ -39,7 +40,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="es"
       className={`${inter.variable} ${fraunces.variable} ${plexMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        <PageTransition>{children}</PageTransition>
+      </body>
     </html>
   );
 }
