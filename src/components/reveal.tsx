@@ -9,6 +9,13 @@ type RevealProps = {
   delay?: number;
   /** Distancia inicial en px desde la que entra el contenido. */
   distance?: number;
+  /** Opacidad de arranque antes de hacerse visible (0-1). Por defecto 0
+      (arranca invisible del todo). Para texto largo, un fade total se ve
+      demasiado brusco — subir esto deja el contenido legible desde el
+      primer frame. */
+  initialOpacity?: number;
+  /** Duración de la transición en ms. Por defecto 700. */
+  duration?: number;
 };
 
 /**
@@ -21,7 +28,14 @@ type RevealProps = {
  * de abajo (ver globals.css) anula la transición y todo aparece directo,
  * sin animar.
  */
-export function Reveal({ children, className = "", delay = 0, distance = 24 }: RevealProps) {
+export function Reveal({
+  children,
+  className = "",
+  delay = 0,
+  distance = 24,
+  initialOpacity = 0,
+  duration = 700,
+}: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -45,12 +59,14 @@ export function Reveal({ children, className = "", delay = 0, distance = 24 }: R
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ease-out motion-reduce:transition-none ${
-        visible ? "translate-y-0 opacity-100" : "opacity-0"
+      className={`transition-all ease-out motion-reduce:transition-none ${
+        visible ? "translate-y-0 opacity-100" : ""
       } ${className}`}
       style={{
+        transitionDuration: `${duration}ms`,
         transitionDelay: visible ? `${delay}ms` : "0ms",
         transform: visible ? undefined : `translateY(${distance}px)`,
+        opacity: visible ? undefined : initialOpacity,
       }}
     >
       {children}

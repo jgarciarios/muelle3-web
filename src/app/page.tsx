@@ -66,8 +66,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* INTRO */}
-      <Reveal>
+      {/* INTRO — antes usaba el fade por defecto (opacity 0 → 100, 700ms):
+          para un bloque de texto largo como este, arrancar en opacity 0 lo
+          dejaba casi ilegible mientras se animaba. Arranca en 0.4 y con una
+          transición más corta (400ms) para que siga siendo un efecto sutil
+          pero legible desde el primer frame. */}
+      <Reveal initialOpacity={0.4} duration={400}>
         <section className="mx-auto max-w-4xl px-6 py-20 text-center">
           <h2 className="font-serif text-3xl font-bold text-ink">
             Un lugar con los pies en la arena y la vista al muelle
