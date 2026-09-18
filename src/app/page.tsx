@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SiteNav } from "@/components/nav";
 import { MoodCarousel } from "@/components/mood-carousel";
 import { GalleryPhoto } from "@/components/gallery-photo";
+import { AmbienceGallery } from "@/components/ambience-gallery";
 import { ReviewsCarousel } from "@/components/reviews-carousel";
 import { Reveal } from "@/components/reveal";
 import { MEITRE_RESERVATION_URL } from "@/lib/meitre";
@@ -190,11 +191,34 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* AMBIENTE — galería inmersiva pedida por Juani para vender el lugar,
+          no solo la comida: la terraza, la fachada de día y de atardecer.
+          Grid asimétrico (una foto grande + dos chicas) con reveal on
+          scroll vía Framer Motion (ver ambience-gallery.tsx). Todavía
+          faltan dos fotos reales para completar esta idea — el mural de
+          Carlos Páez Vilaró (mencionado en /historia) y una vista al
+          muelle desde adentro del salón — pendientes de pedirle a Juani,
+          anotado en PLAN.md. */}
+      <section className="mx-auto max-w-6xl px-6 py-20">
+        <div className="mb-10 text-center">
+          <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-mustard uppercase">
+            El lugar
+          </p>
+          <h2 className="font-serif text-3xl font-bold text-ink">Un lugar con alma propia</h2>
+          <p className="mx-auto mt-3 max-w-xl text-ink-muted">
+            Atardeceres frente al mar, la terraza de siempre y cada rincón con su propia historia.
+          </p>
+        </div>
+
+        <AmbienceGallery />
+      </section>
+
       {/* La galería "La terraza / El muelle de día / Nuestro equipo" que
-          estaba acá se sacó por pedido de Juani (quedaba redundante justo
-          debajo de "Nuestra Cocina"). Fotos del lugar por dentro y de la
-          cava van a ir en la página de Eventos; una foto del personal
-          trabajando va a ir en Contacto/Horarios — pendiente, ver PLAN.md. */}
+          estaba acá antes se sacó por pedido de Juani (quedaba redundante
+          justo debajo de "Nuestra Cocina") — reemplazada por la sección
+          AMBIENTE de arriba. Fotos del lugar por dentro y de la cava van a
+          ir en la página de Eventos; una foto del personal trabajando va a
+          ir en Contacto/Horarios — pendiente, ver PLAN.md. */}
 
       {/* RESEÑAS (vista previa — ver comentario en reviews-carousel.tsx) */}
       <Reveal>
