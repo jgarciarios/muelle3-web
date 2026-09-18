@@ -15,6 +15,19 @@ const links = [
 
 export function SiteNav({ hideLogo = false }: { hideLogo?: boolean }) {
   const [open, setOpen] = useState(false);
+  // Antes el header era `absolute` — quedaba pegado arriba del hero y
+  // se iba de la vista con el resto de la página al scrollear. Pasa a
+  // `fixed` (siempre visible) y arranca transparente sobre la foto del
+  // hero; después de 100px de scroll se pone sólido con blur + sombra,
+  // como pidió Juani. `scrolled` maneja ese cambio de estilo.
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 100);
+    onScroll(); // por si la página ya carga scrolleada (ej. al volver con el botón "atrás")
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Bloquea el scroll del body mientras el overlay está abierto, y permite
   // cerrarlo con Escape.
@@ -33,10 +46,22 @@ export function SiteNav({ hideLogo = false }: { hideLogo?: boolean }) {
   }, [open]);
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-20">
-      {/* Franja de sombra sutil para que logo y botón siempre tengan contraste,
-          sin importar qué foto esté de fondo en ese momento. */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-navy/60 to-transparent" />
+    <header
+      className={`fixed top-0 left-0 right-0 z-20 transition-all duration-300 ${
+        scrolled
+          ? "bg-white/90 shadow-md backdrop-blur-md"
+          : "bg-transparent shadow-none"
+      }`}
+    >
+      {/* Franja de sombra sutil para que logo y botón siempre tengan contraste
+          contra la foto del hero — solo hace falta mientras el header sigue
+          transparente; una vez que se pone sólido, se desvanece (ya no hace
+          falta, y se vería como una segunda sombra encima del blur). */}
+      <div
+        className={`pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-navy/60 to-transparent transition-opacity duration-300 ${
+          scrolled ? "opacity-0" : "opacity-100"
+        }`}
+      />
 
       <div className="relative mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         {/* En el Home la marca ya aparece grande y centrada en el hero
@@ -68,18 +93,22 @@ export function SiteNav({ hideLogo = false }: { hideLogo?: boolean }) {
           </Link>
         )}
 
-        {/* Botón sólido de alto contraste — antes era un borde translúcido
-            que se perdía contra las fotos de fondo. */}
+        {/* Botón de alto contraste contra la foto del hero (blanco sobre
+            fondo transparente). Una vez que el header se pone sólido
+            blanco, ese mismo blanco se perdería — pasa a navy sobre
+            blanco en ese estado. */}
         <button
           type="button"
           onClick={() => setOpen(true)}
           aria-expanded={open}
           aria-label="Abrir menú"
-          className="flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-xs font-bold tracking-[0.2em] text-navy uppercase shadow-lg transition hover:bg-mustard"
+          className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold tracking-[0.2em] uppercase shadow-lg transition-colors duration-300 ${
+            scrolled ? "bg-navy text-white hover:bg-celeste-deep-2" : "bg-white text-navy hover:bg-mustard"
+          }`}
         >
           <span className="flex flex-col gap-[3px]">
-            <span className="h-[2px] w-4 bg-navy" />
-            <span className="h-[2px] w-4 bg-navy" />
+            <span className={`h-[2px] w-4 transition-colors duration-300 ${scrolled ? "bg-white" : "bg-navy"}`} />
+            <span className={`h-[2px] w-4 transition-colors duration-300 ${scrolled ? "bg-white" : "bg-navy"}`} />
           </span>
           Menú
         </button>

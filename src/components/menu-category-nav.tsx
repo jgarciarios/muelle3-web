@@ -80,7 +80,13 @@ export function MenuCategoryNav({ categorias }: { categorias: Categoria[] }) {
   }, [activo]);
 
   return (
-    <nav className="sticky top-0 z-10 border-b border-ink/10 bg-white/95 backdrop-blur">
+    // top-[104px]: alto real del header fijo en esta página — con logo
+    // visible (el de /menu no pasa `hideLogo`) el header mide 104px, no
+    // los 76px que mide en el Home sin logo (ver nav.tsx). Antes el header
+    // era `absolute` y se iba con el scroll, así que este nav de
+    // categorías podía pegarse a top-0 sin problema; ahora que quedó
+    // `fixed` y siempre visible, hay que dejarle ese espacio o lo tapa.
+    <nav className="sticky top-[104px] z-10 border-b border-ink/10 bg-white/95 backdrop-blur">
       <div className="relative mx-auto max-w-6xl">
         {/* Degradés en los bordes: sutil pista de que la tira sigue para
             ese lado, sin flechas ni botones que llamen la atención. */}

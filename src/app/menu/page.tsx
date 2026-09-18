@@ -47,7 +47,11 @@ export default function MenuPage() {
           copiar sus colores. */}
       <div className="mx-auto max-w-6xl px-6 py-16 font-mono">
         {MENU.map((cat, i) => (
-          <section key={cat.id} id={cat.id} className={`scroll-mt-16 ${i > 0 ? "mt-16" : ""}`}>
+            /* scroll-mt-[168px]: header fijo (104px, con logo) + alto del
+               nav de categorías pegado debajo (~60px) — si no, un link de
+               ancla deja el título de la categoría tapado detrás de los
+               dos. */
+            <section key={cat.id} id={cat.id} className={`scroll-mt-[168px] ${i > 0 ? "mt-16" : ""}`}>
             <h2 className="text-2xl font-bold tracking-[0.04em] text-celeste-deep uppercase">
               {cat.titulo}
             </h2>
