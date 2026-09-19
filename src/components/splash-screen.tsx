@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 
@@ -35,6 +35,20 @@ export function SplashScreen() {
   const [show, setShow] = useState(true);
   const prefersReducedMotion = useReducedMotion();
 
+  // `useReducedMotion` puede cambiar de valor después del mount (arranca en
+  // `null` hasta que confirma el matchMedia, y sigue escuchando si el
+  // usuario lo cambia en el sistema operativo en caliente). Si lo tuviéramos
+  // como dependencia del efecto de abajo, cada cambio de ese valor volvería
+  // a correr el efecto — reprogramando/cancelando el timer a mitad de
+  // camino. Lo leemos desde un ref en vez de como dependencia, así el
+  // efecto que decide mostrar/ocultar el splash corre UNA sola vez al
+  // montar y su ciclo de vida (mostrar → timer → desmontar del todo vía
+  // AnimatePresence) queda completamente determinista.
+  const prefersReducedMotionRef = useRef(prefersReducedMotion);
+  useEffect(() => {
+    prefersReducedMotionRef.current = prefersReducedMotion;
+  }, [prefersReducedMotion]);
+
   useIsomorphicLayoutEffect(() => {
     if (sessionStorage.getItem(SESSION_KEY)) {
       setShow(false);
@@ -44,14 +58,16 @@ export function SplashScreen() {
 
     // Alguien con "reducir movimiento" activado en el sistema: mejor no
     // mostrar nada animado, se saca directo.
-    if (prefersReducedMotion) {
+    if (prefersReducedMotionRef.current) {
       setShow(false);
       return;
     }
 
     const hideTimer = setTimeout(() => setShow(false), HOLD_MS);
     return () => clearTimeout(hideTimer);
-  }, [prefersReducedMotion]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intencional:
+    // correr solo al montar, ver comentario arriba.
+  }, []);
 
   // Mientras está visible, bloquea el scroll del body — es tan breve que
   // no debería notarse, pero evita que un scroll accidental quede "debajo"
@@ -70,7 +86,14 @@ export function SplashScreen() {
       {show && (
         <motion.div
           data-testid="splash-screen"
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-navy"
+          // z-40: por debajo del overlay del menú mobile (z-50, ver nav.tsx)
+          // a propósito. Antes era z-[100] — más alto que TODO, así que si
+          // este splash coincidía en pantalla con el menú mobile abierto (o
+          // abriéndose) quedaba tapándolo, generando la franja gris y el
+          // botón "cerrar" mal ubicado que reportó Juani. z-40 sigue
+          // arriba del header (z-20) para cubrir toda la página en la
+          // primera carga, pero nunca gana contra el menú.
+          className="fixed inset-0 z-40 flex items-center justify-center bg-navy"
           exit={{ opacity: 0 }}
           transition={{ duration: EXIT_MS / 1000, ease: "easeInOut" }}
         >

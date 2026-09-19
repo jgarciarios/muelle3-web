@@ -114,10 +114,19 @@ export function SiteNav({ hideLogo = false }: { hideLogo?: boolean }) {
         </button>
       </div>
 
-      {/* Overlay de navegación a pantalla completa */}
+      {/* Overlay de navegación a pantalla completa. Cerrado, queda arriba
+          de la pantalla vía -translate-y-full — pero por defecto un div
+          fixed inset-0 sigue ocupando (y capturando clicks de) toda la
+          ventana aunque esté visualmente fuera de vista, tape o no algo
+          debajo. Antes eso pasaba con pointer-events en "auto" siempre,
+          así que un click en, por ejemplo, el botón "Reservar" del hero
+          (que cae dentro de ese mismo rectángulo fixed inset-0) podía ser
+          interceptado por este overlay "cerrado" en vez de llegar al botón
+          real. pointer-events-none cuando aria-hidden lo saca del todo del
+          flujo de eventos mientras está cerrado. */}
       <div
         className={`fixed inset-0 z-50 flex flex-col justify-center bg-navy px-8 transition-transform duration-500 ease-[cubic-bezier(.6,0,.3,1)] ${
-          open ? "translate-y-0" : "-translate-y-full"
+          open ? "translate-y-0 pointer-events-auto" : "-translate-y-full pointer-events-none"
         }`}
         aria-hidden={!open}
       >
