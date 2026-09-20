@@ -46,73 +46,75 @@ export function SiteNav({ hideLogo = false }: { hideLogo?: boolean }) {
   }, [open]);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-20 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/90 shadow-md backdrop-blur-md"
-          : "bg-transparent shadow-none"
-      }`}
-    >
-      {/* Franja de sombra sutil para que logo y botón siempre tengan contraste
-          contra la foto del hero — solo hace falta mientras el header sigue
-          transparente; una vez que se pone sólido, se desvanece (ya no hace
-          falta, y se vería como una segunda sombra encima del blur). */}
-      <div
-        className={`pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-navy/60 to-transparent transition-opacity duration-300 ${
-          scrolled ? "opacity-0" : "opacity-100"
+    <>
+        <header
+        className={`fixed top-0 left-0 right-0 z-20 transition-all duration-300 ${
+          scrolled
+            ? "bg-white/90 shadow-md backdrop-blur-md"
+            : "bg-transparent shadow-none"
         }`}
-      />
-
-      <div className="relative mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        {/* En el Home la marca ya aparece grande y centrada en el hero
-            (ver page.tsx) — repetirla acá arriba a la izquierda se veía
-            duplicada, por eso ahí se pasa hideLogo. En el resto de las
-            páginas (que no tienen ese hero centrado) sigue haciendo falta
-            acá para que quede algo de marca en el header. */}
-        {hideLogo ? (
-          <span />
-        ) : (
-          <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
-            {/* El archivo original (logo-real.png) tiene el isotipo cuadrado
-                centrado en un lienzo 2:1 con muchísimo margen transparente a
-                los costados — al mostrarlo con width/height fijos ese margen
-                se veía como parte del logo, achicándolo hasta ser illegible.
-                logo-cropped.png es el mismo isotipo real, recortado a ese
-                cuadrado. El fondo blanco es necesario: el PNG es transparente
-                y sin respaldo se mezcla con la foto de atrás. */}
-            <div className="rounded-md bg-white p-2 shadow-md">
-              <Image
-                src="/images/logo-cropped.png"
-                alt="Muelle 3 — Kitchen & Bar"
-                width={116}
-                height={116}
-                className="h-11 w-11 sm:h-12 sm:w-12"
-                priority
-              />
-            </div>
-          </Link>
-        )}
-
-        {/* Botón de alto contraste contra la foto del hero (blanco sobre
-            fondo transparente). Una vez que el header se pone sólido
-            blanco, ese mismo blanco se perdería — pasa a navy sobre
-            blanco en ese estado. */}
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          aria-expanded={open}
-          aria-label="Abrir menú"
-          className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold tracking-[0.2em] uppercase shadow-lg transition-colors duration-300 ${
-            scrolled ? "bg-navy text-white hover:bg-celeste-deep-2" : "bg-white text-navy hover:bg-mustard"
+      >
+        {/* Franja de sombra sutil para que logo y botón siempre tengan contraste
+            contra la foto del hero — solo hace falta mientras el header sigue
+            transparente; una vez que se pone sólido, se desvanece (ya no hace
+            falta, y se vería como una segunda sombra encima del blur). */}
+        <div
+          className={`pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-navy/60 to-transparent transition-opacity duration-300 ${
+            scrolled ? "opacity-0" : "opacity-100"
           }`}
-        >
-          <span className="flex flex-col gap-[3px]">
-            <span className={`h-[2px] w-4 transition-colors duration-300 ${scrolled ? "bg-white" : "bg-navy"}`} />
-            <span className={`h-[2px] w-4 transition-colors duration-300 ${scrolled ? "bg-white" : "bg-navy"}`} />
-          </span>
-          Menú
-        </button>
-      </div>
+        />
+
+        <div className="relative mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+          {/* En el Home la marca ya aparece grande y centrada en el hero
+              (ver page.tsx) — repetirla acá arriba a la izquierda se veía
+              duplicada, por eso ahí se pasa hideLogo. En el resto de las
+              páginas (que no tienen ese hero centrado) sigue haciendo falta
+              acá para que quede algo de marca en el header. */}
+          {hideLogo ? (
+            <span />
+          ) : (
+            <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
+              {/* El archivo original (logo-real.png) tiene el isotipo cuadrado
+                  centrado en un lienzo 2:1 con muchísimo margen transparente a
+                  los costados — al mostrarlo con width/height fijos ese margen
+                  se veía como parte del logo, achicándolo hasta ser illegible.
+                  logo-cropped.png es el mismo isotipo real, recortado a ese
+                  cuadrado. El fondo blanco es necesario: el PNG es transparente
+                  y sin respaldo se mezcla con la foto de atrás. */}
+              <div className="rounded-md bg-white p-2 shadow-md">
+                <Image
+                  src="/images/logo-cropped.png"
+                  alt="Muelle 3 — Kitchen & Bar"
+                  width={116}
+                  height={116}
+                  className="h-11 w-11 sm:h-12 sm:w-12"
+                  priority
+                />
+              </div>
+            </Link>
+          )}
+
+          {/* Botón de alto contraste contra la foto del hero (blanco sobre
+              fondo transparente). Una vez que el header se pone sólido
+              blanco, ese mismo blanco se perdería — pasa a navy sobre
+              blanco en ese estado. */}
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-expanded={open}
+            aria-label="Abrir menú"
+            className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold tracking-[0.2em] uppercase shadow-lg transition-colors duration-300 ${
+              scrolled ? "bg-navy text-white hover:bg-celeste-deep-2" : "bg-white text-navy hover:bg-mustard"
+            }`}
+          >
+            <span className="flex flex-col gap-[3px]">
+              <span className={`h-[2px] w-4 transition-colors duration-300 ${scrolled ? "bg-white" : "bg-navy"}`} />
+              <span className={`h-[2px] w-4 transition-colors duration-300 ${scrolled ? "bg-white" : "bg-navy"}`} />
+            </span>
+            Menú
+          </button>
+        </div>
+        </header>
 
       {/* Overlay de navegación a pantalla completa. Cerrado, queda arriba
           de la pantalla vía -translate-y-full — pero por defecto un div
@@ -175,6 +177,6 @@ export function SiteNav({ hideLogo = false }: { hideLogo?: boolean }) {
           </li>
         </ul>
       </div>
-    </header>
+    </>
   );
 }
