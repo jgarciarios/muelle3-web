@@ -150,11 +150,14 @@ export default function HomePage() {
                 sizes="(max-width: 640px) 50vw, 25vw"
               />
             </Reveal>
+            {/* Pese al nombre de archivo ("cheesecake-frutos-rojos.jpg"),
+                esta foto es un plato de ñoquis con estofado -- reportado
+                por Juani 20/09/2026, verificado abriendo la imagen. */}
             <Reveal delay={90} className="aspect-[4/5]">
               <GalleryPhoto
                 src="/images/platos/cheesecake-frutos-rojos.jpg"
-                alt="Cheesecake con frutos rojos"
-                caption="Cheesecake de frutos rojos"
+                alt="Ñoquis caseros con estofado"
+                caption="Ñoquis con estofado"
                 className="h-full"
                 sizes="(max-width: 640px) 50vw, 25vw"
               />
