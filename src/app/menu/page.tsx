@@ -22,6 +22,7 @@ export default function MenuPage() {
           alt=""
           fill
           priority
+          sizes="100vw"
           className="object-cover opacity-40"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/70 to-navy/30" />

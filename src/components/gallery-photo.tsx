@@ -5,6 +5,11 @@ type GalleryPhotoProps = {
   alt: string;
   caption: string;
   className?: string;
+  // Ancho real que ocupa la imagen en pantalla en cada breakpoint, para que
+  // next/image no sirva siempre la versión más pesada (ver PLAN.md, fix de
+  // performance 19/09/2026). Cada lugar que usa GalleryPhoto pasa su propio
+  // valor según el grid en el que vive; este es un fallback conservador.
+  sizes?: string;
 };
 
 // Foto de galería con overlay + caption que aparecen recién al hacer hover
@@ -12,13 +17,20 @@ type GalleryPhotoProps = {
 // para que la foto se vea limpia en reposo y la jerarquía editorial
 // (zoom + degradé + nombre del plato) sea un gesto que el usuario
 // "descubre" al pasar el mouse, no algo que está siempre encima de la foto.
-export function GalleryPhoto({ src, alt, caption, className = "" }: GalleryPhotoProps) {
+export function GalleryPhoto({
+  src,
+  alt,
+  caption,
+  className = "",
+  sizes = "(max-width: 640px) 100vw, 33vw",
+}: GalleryPhotoProps) {
   return (
     <div className={`group relative overflow-hidden rounded-lg ${className}`}>
       <Image
         src={src}
         alt={alt}
         fill
+        sizes={sizes}
         className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
       />
       {/* Degradé oscuro de abajo hacia arriba, invisible en reposo y que

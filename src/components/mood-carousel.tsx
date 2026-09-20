@@ -103,6 +103,7 @@ export function MoodCarousel() {
                 src={mood.src}
                 alt={mood.alt}
                 fill
+                sizes="100vw"
                 priority={i === 0}
                 className="animate-ken-burns object-cover"
               />

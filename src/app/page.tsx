@@ -115,6 +115,7 @@ export default function HomePage() {
                 alt="Fettuccine Gorriti con langostinos y mejillones"
                 caption="Fettuccine Gorriti"
                 className="h-full"
+                sizes="(max-width: 640px) 100vw, 66vw"
               />
             </Reveal>
             <Reveal delay={100} className="aspect-[4/5]">
@@ -123,6 +124,7 @@ export default function HomePage() {
                 alt="Mila del Muelle con papas fritas"
                 caption="Mila del Muelle"
                 className="h-full"
+                sizes="(max-width: 640px) 100vw, 33vw"
               />
             </Reveal>
             {/* Pese al nombre de archivo ("cheesecake-detalle.jpg"), esta foto
@@ -133,6 +135,7 @@ export default function HomePage() {
                 alt="Costillar angus braseado con puré"
                 caption="Costillar angus braseado"
                 className="h-full"
+                sizes="(max-width: 640px) 100vw, 33vw"
               />
             </Reveal>
           </div>
@@ -144,6 +147,7 @@ export default function HomePage() {
                 alt="Flan de dulce de leche con pochoclo caramelizado"
                 caption="Flan de dulce de leche"
                 className="h-full"
+                sizes="(max-width: 640px) 50vw, 25vw"
               />
             </Reveal>
             <Reveal delay={90} className="aspect-[4/5]">
@@ -152,6 +156,7 @@ export default function HomePage() {
                 alt="Cheesecake con frutos rojos"
                 caption="Cheesecake de frutos rojos"
                 className="h-full"
+                sizes="(max-width: 640px) 50vw, 25vw"
               />
             </Reveal>
             {/* Pese al nombre de archivo ("cheesecake-plato.jpg"), esta foto
@@ -162,6 +167,7 @@ export default function HomePage() {
                 alt="Risotto de hongos"
                 caption="Risotto de hongos"
                 className="h-full"
+                sizes="(max-width: 640px) 50vw, 25vw"
               />
             </Reveal>
             {/* Foto real de la mesa con varios platos a la vez — por eso el
@@ -173,6 +179,7 @@ export default function HomePage() {
                 alt="Mesa con variedad de platos de Muelle 3"
                 caption="Para compartir"
                 className="h-full"
+                sizes="(max-width: 640px) 50vw, 25vw"
               />
             </Reveal>
           </div>

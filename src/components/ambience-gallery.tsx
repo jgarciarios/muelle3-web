@@ -8,6 +8,9 @@ type AmbientePhoto = {
   alt: string;
   caption: string;
   className: string;
+  // Ancho real en pantalla según la celda del grid (ver fix de
+  // performance en gallery-photo.tsx).
+  sizes: string;
 };
 
 // Fotos reales de ambiente (nunca stock). Ojo con lo que falta todavía:
@@ -22,18 +25,21 @@ const FOTOS: AmbientePhoto[] = [
     alt: "Terraza de Muelle 3 con mesas de madera y lámparas de mimbre",
     caption: "La terraza",
     className: "sm:col-span-2 sm:row-span-2 aspect-[4/5] sm:aspect-auto",
+    sizes: "(max-width: 640px) 100vw, 66vw",
   },
   {
     src: "/images/fachada-atardecer-hq.png",
     alt: "Fachada de Muelle 3 al atardecer, cartel retroiluminado contra el cielo",
     caption: "Atardecer en Muelle 3",
     className: "aspect-[4/5]",
+    sizes: "(max-width: 640px) 100vw, 33vw",
   },
   {
     src: "/images/fachada-dia-hq.png",
     alt: "Entrada de Muelle 3 de día",
     caption: "La entrada",
     className: "aspect-[4/5]",
+    sizes: "(max-width: 640px) 100vw, 33vw",
   },
 ];
 
@@ -61,7 +67,13 @@ export function AmbienceGallery() {
     >
       {FOTOS.map((foto) => (
         <motion.div key={foto.src} variants={item} className={foto.className}>
-          <GalleryPhoto src={foto.src} alt={foto.alt} caption={foto.caption} className="h-full" />
+          <GalleryPhoto
+            src={foto.src}
+            alt={foto.alt}
+            caption={foto.caption}
+            className="h-full"
+            sizes={foto.sizes}
+          />
         </motion.div>
       ))}
     </motion.div>
