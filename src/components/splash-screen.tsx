@@ -13,17 +13,21 @@ const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffec
 
 const SESSION_KEY = "muelle3-splash-shown";
 // Cuánto se mantiene el logo en pantalla antes de empezar a disolverse.
-const HOLD_MS = 500;
-// Duración de la disolución final hacia el hero.
-const EXIT_MS = 300;
+// Bajado de 500ms a 200ms (19/09/2026, Juani: "el movimiento de la página
+// está lento") -- el total (HOLD_MS + EXIT_MS) pasa de ~800ms a ~400ms.
+const HOLD_MS = 200;
+// Duración de la disolución final hacia el hero. Bajado de 300ms a 200ms
+// por el mismo pedido.
+const EXIT_MS = 200;
 
 /**
  * Pantalla de carga breve al entrar por primera vez al sitio en una pestaña
  * (sessionStorage, no localStorage: cada pestaña/sesión nueva la vuelve a
  * ver una vez, pero navegar entre páginas internas no la repite). Fondo
  * navy, logo con fade-in + scale sutil, y se disuelve hacia el hero.
- * Duración total ~800ms (HOLD_MS + EXIT_MS), dentro del rango de 600-900ms
- * pedido.
+ * Duración total ~400ms (HOLD_MS + EXIT_MS) -- acortado el 19/09/2026 a
+ * pedido de Juani ("el movimiento de la página está lento"), venía de
+ * ~800ms.
  *
  * `show` arranca en `true` tanto en el server como en el primer render del
  * cliente (sessionStorage no existe en el server) para que no haya mismatch
