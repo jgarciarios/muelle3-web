@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SiteNav } from "@/components/nav";
+import { HistoriaCollage } from "@/components/historia-collage";
 
 export const metadata: Metadata = {
   title: "Nuestra Historia — Muelle 3",
@@ -33,13 +34,16 @@ export default function HistoriaPage() {
             del arte y postales únicas a las playas de Punta del Este, el muelle de La Pastora y
             la Isla Gorriti.
           </p>
-          <p>
-            Nuestro interior cobra vida con el mural de Carlos Páez Vilaró, una sirena que desde
-            1996 nada en las profundidades del océano, restaurada con amor para nuestra
-            inauguración. La esencia de Muelle 3 también vive en cada plato, con ingredientes
-            frescos, locales y orgánicos que rinden homenaje al antiguo Club de Pesca y a Punta
-            del Este.
-          </p>
+        </div>
+
+        {/* Collage editorial: texto del mural + fotos apiladas. Reemplaza el
+            párrafo del mural que antes iba acá en texto plano -- ese contenido
+            ahora vive dentro de HistoriaCollage. Aprobado por Juani 21/09/2026. */}
+        <div className="my-12">
+          <HistoriaCollage />
+        </div>
+
+        <div className="space-y-6 text-lg leading-relaxed text-ink-muted">
           <p>
             A nuestros amigos de siempre, nos alegra tenerlos de vuelta; y a quienes nos visitan
             por primera vez, bienvenidos a su nueva casa frente al mar. Te invitamos a disfrutar
