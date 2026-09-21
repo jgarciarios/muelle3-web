@@ -16,7 +16,7 @@ import { Reveal } from "@/components/reveal";
 // pisar la animacion de entrada, que solo anima opacidad + traslacion.
 export function HistoriaCollage() {
   return (
-    <div className="grid grid-cols-1 items-center gap-10 rounded-lg border border-ink/10 bg-white p-8 sm:gap-16 sm:p-11 lg:grid-cols-2">
+    <div className="grid grid-cols-1 items-center gap-10 sm:gap-16 lg:grid-cols-2">
       <Reveal>
         <div>
           <p className="mb-2 text-xs font-semibold tracking-[0.2em] text-mustard uppercase">
