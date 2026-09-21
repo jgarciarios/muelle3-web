@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SiteNav } from "@/components/nav";
+import { SiteFooter } from "@/components/site-footer";
 import { HistoriaCollage } from "@/components/historia-collage";
 
 export const metadata: Metadata = {
@@ -66,9 +67,7 @@ export default function HistoriaPage() {
         </div>
       </section>
 
-      <footer className="bg-navy py-10 text-center text-sm text-white/60">
-        <p>Muelle 3 — Kitchen & Bar · Playa Mansa, Punta del Este</p>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }

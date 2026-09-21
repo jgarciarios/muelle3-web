@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { SiteNav } from "@/components/nav";
+import { SiteFooter } from "@/components/site-footer";
 import { MenuCategoryNav } from "@/components/menu-category-nav";
 import { MENU } from "@/lib/menu-data";
 
@@ -81,9 +82,7 @@ export default function MenuPage() {
         ))}
       </div>
 
-      <footer className="bg-navy py-10 text-center text-sm text-white/60">
-        <p>Muelle 3 — Kitchen & Bar · Playa Mansa, Punta del Este</p>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }

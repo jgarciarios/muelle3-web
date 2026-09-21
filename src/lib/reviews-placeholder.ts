@@ -1,14 +1,13 @@
 /**
- * Reviews de EJEMPLO — no son reales.
+ * PLACEHOLDER TEMPORAL -- pendiente de reemplazo por Juani (21/09/2026).
  *
- * Se usan solo para mostrarle a los dueños cómo va a quedar el carrusel de
- * reseñas en el Home, antes de conectar la Places API (que requiere un
- * proyecto de Google Cloud con billing activo — todavía no existe).
+ * El badge "Vista previa" que marcaba esto como reseñas de ejemplo ya se
+ * saco del carrusel (ver reviews-carousel.tsx), asi que estos datos NO
+ * deben quedar en produccion como estan: son inventados, no reseñas reales.
  *
- * Nombres, fechas y textos son inventados a propósito. Cuando se conecte la
- * Places API real, este archivo deja de usarse (ver `src/components/reviews-carousel.tsx`).
- * No reemplazar estos datos por nombres de clientes reales ni mostrarlos como
- * si fueran reseñas genuinas fuera de esta preview.
+ * Reemplazar este array por 3-5 reseñas reales (texto, nombre, rating,
+ * fecha aproximada) que Juani va a pasar, o por el resultado de la Places
+ * API si se conecta esa integracion en su lugar.
  */
 export type ReviewItem = {
   autor: string;

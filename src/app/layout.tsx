@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Fraunces, IBM_Plex_Mono } from "next/font/google";
 import { PageTransition } from "@/components/page-transition";
 import { SplashScreen } from "@/components/splash-screen";
+import { WhatsAppButton } from "@/components/whatsapp-button";
 import "./globals.css";
 
 const inter = Inter({
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col font-sans">
         <SplashScreen />
         <PageTransition>{children}</PageTransition>
+        <WhatsAppButton />
       </body>
     </html>
   );

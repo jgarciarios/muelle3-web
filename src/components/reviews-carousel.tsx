@@ -46,13 +46,11 @@ function ReviewCard({ review }: { review: ReviewItem }) {
 /**
  * Carrusel de reseñas del Home.
  *
- * De momento muestra reviews de EJEMPLO (`PLACEHOLDER_REVIEWS`) — todavía no
- * hay un proyecto de Google Cloud con la Places API + billing activo para
- * traer las reviews reales de Google. Por eso el badge "Vista previa" es
- * visible: no hay que sacarlo hasta reemplazar esto por datos reales.
- *
- * Cuando esté la Places API conectada: reemplazar `reviews` por el resultado
- * real (server-side, cacheado) y sacar el badge de vista previa.
+ * Reportado por Juani 21/09/2026: el badge "Vista previa" y el texto que
+ * explicaba que eran reseñas de ejemplo NO deben quedar visibles en
+ * produccion -- se sacaron del render. `PLACEHOLDER_REVIEWS` sigue siendo
+ * un placeholder temporal (ver src/lib/reviews-placeholder.ts) hasta que
+ * se reemplace por 3-5 reseñas reales o se conecte la Places API.
  */
 export function ReviewsCarousel({
   reviews = PLACEHOLDER_REVIEWS,
@@ -91,14 +89,7 @@ export function ReviewsCarousel({
   return (
     <section className="mx-auto max-w-6xl px-6 py-20">
       <div className="mb-8 flex flex-col items-center gap-2 text-center">
-        <span className="rounded-full bg-amber/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-wood">
-          Vista previa · reseñas de ejemplo
-        </span>
         <h2 className="font-serif text-3xl font-bold text-ink">Lo que dicen de nosotros</h2>
-        <p className="max-w-lg text-ink-muted">
-          Así se va a ver el carrusel con las últimas reseñas reales de Google una vez que
-          conectemos la Places API.
-        </p>
       </div>
 
       {/* Una tarjeta a la vez, a todos los anchos de pantalla. Antes cada
