@@ -1,9 +1,36 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ReservarButton } from "@/components/reservar-button";
+
+// Mismo motivo que en gallery-photo.tsx / splash-screen.tsx: `useLayoutEffect`
+// tira warning si corre en el servidor, y este componente se prerenderiza ahí.
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
+// Bug real (22/09/2026, reportado por el PM tras probar en un celular real):
+// el selector "¿Cuándo pensás venir?" necesitaba DOS toques -- el primero
+// solo marcaba el botón, recién el segundo cambiaba la foto/acentos. Es un
+// bug bien conocido de Safari/iOS (no de React ni de este código en
+// particular): cuando un elemento tiene una regla CSS `:hover` y no se
+// maneja el toque explícitamente, iOS interpreta el PRIMER toque como "state
+// de hover" en vez de disparar el click -- recién el segundo toque, ya en
+// estado "hover", dispara el click real. Los botones de este selector tenían
+// clases `hover:` de Tailwind (`hover:border-white/60`, `hover:bg-celeste/15`,
+// etc.), que son las que activan esa trampa.
+//
+// Mismo patrón que ya existe en gallery-photo.tsx para el mismo motivo
+// (ahí para el overlay de hover, acá para el botón): en touch, se sacan las
+// clases `hover:` del todo -- no hay hover real en touch, así que no hacen
+// falta, y sacarlas saca también el bug.
+function sinHoverEnTouch(clases: string, esTouch: boolean) {
+  if (!esTouch) return clases;
+  return clases
+    .split(" ")
+    .filter((c) => !c.startsWith("hover:"))
+    .join(" ");
+}
 
 const AUTOPLAY_MS = 6000;
 
@@ -76,11 +103,50 @@ const MOODS: Mood[] = [
 export function HeroExperience() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  // Fix de performance mobile (21/09/2026, bug real reportado por Juani
+  // probando en un celular real): antes los 3 moods se montaban TODOS
+  // juntos desde el primer render (el crossfade solo los ocultaba con
+  // opacity, nunca los sacaba del DOM), así que las dos fotos reales
+  // (Día + Atardecer, cada una a pantalla completa) se descargaban de una
+  // sola vez apenas cargaba el Home -- next/image no puede diferir esto
+  // con `loading="lazy"` porque geométricamente ya están dentro del
+  // viewport (el `opacity-0` no las saca del área que mide el lazy
+  // loading). Ahora cada foto real solo se monta (y por lo tanto se
+  // descarga) la primera vez que ese mood se vuelve activo -- el mood
+  // inicial ("Día") se agrega de entrada porque es lo primero que se ve,
+  // el resto se suma a este set recién cuando el usuario lo elige o el
+  // autoplay llega a él. Una vez montada, una foto se queda en el set (no
+  // se saca) para que el crossfade de vuelta siga andando sin recargarla.
+  const [loadedMoodIds, setLoadedMoodIds] = useState<Set<string>>(() => new Set([MOODS[0].id]));
+  const [isTouch, setIsTouch] = useState(false);
+
+  useIsomorphicLayoutEffect(() => {
+    const mediaQuery = window.matchMedia("(hover: none)");
+    setIsTouch(mediaQuery.matches);
+    const handleChange = (event: MediaQueryListEvent) => setIsTouch(event.matches);
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  // Único punto que cambia el mood activo (autoplay y click manual del
+  // selector pasan por acá) -- suma su id al set de "ya visto" en el mismo
+  // paso, en vez de un segundo efecto separado reaccionando al cambio de
+  // `index` (eso dispara un render en cascada innecesario).
+  const selectMood = (i: number) => {
+    setIndex(i);
+    const id = MOODS[i].id;
+    setLoadedMoodIds((prev) => (prev.has(id) ? prev : new Set(prev).add(id)));
+  };
 
   useEffect(() => {
     if (paused) return;
     const id = setInterval(() => {
-      setIndex((i) => (i + 1) % MOODS.length);
+      setIndex((i) => {
+        const next = (i + 1) % MOODS.length;
+        const nextId = MOODS[next].id;
+        setLoadedMoodIds((prev) => (prev.has(nextId) ? prev : new Set(prev).add(nextId)));
+        return next;
+      });
     }, AUTOPLAY_MS);
     return () => clearInterval(id);
   }, [paused]);
@@ -115,21 +181,25 @@ export function HeroExperience() {
             }`}
             aria-hidden={i !== index}
           >
-            {mood.src ? (
+            {mood.src && loadedMoodIds.has(mood.id) ? (
               <Image
                 src={mood.src}
                 alt={mood.alt}
                 fill
                 sizes="100vw"
                 priority={i === 0}
-                className="animate-ken-burns object-cover"
+                // Ken Burns solo en la capa activa: las que están en
+                // opacity-0 esperando su turno no necesitan seguir animando
+                // transform de fondo -- es trabajo de composición de más
+                // para el celular sin ningún resultado visible.
+                className={`object-cover ${i === index ? "animate-ken-burns" : ""}`}
               />
-            ) : (
+            ) : !mood.src ? (
               <div className="absolute inset-0 bg-navy">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.08)_1px,transparent_0)] bg-[length:26px_26px]" />
                 <div className="absolute -top-24 right-1/4 h-96 w-96 rounded-full bg-amber/15 blur-3xl" />
               </div>
-            )}
+            ) : null}
           </div>
         ))}
       </motion.div>
@@ -194,12 +264,12 @@ export function HeroExperience() {
               <button
                 key={mood.id}
                 type="button"
-                onClick={() => setIndex(i)}
+                onClick={() => selectMood(i)}
                 aria-pressed={i === index}
                 className={`rounded-full border px-4 py-1.5 text-xs font-semibold tracking-[0.08em] uppercase backdrop-blur-sm transition-colors duration-300 ${
                   i === index
-                    ? `${activeMood.accentBorder} bg-white/10 text-white`
-                    : "border-white/30 text-white/60 hover:border-white/60 hover:text-white"
+                    ? `${sinHoverEnTouch(activeMood.accentBorder, isTouch)} bg-white/10 text-white`
+                    : sinHoverEnTouch("border-white/30 text-white/60 hover:border-white/60 hover:text-white", isTouch)
                 }`}
               >
                 {mood.label}

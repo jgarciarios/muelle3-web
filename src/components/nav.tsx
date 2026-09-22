@@ -164,7 +164,20 @@ export function SiteNav({ hideLogo = false }: { hideLogo?: boolean }) {
           diseñado para el ancho completo en vez de descentrado. En mobile
           se mantiene la columna única de siempre. */}
       <div
-        className={`fixed inset-0 z-50 flex flex-col bg-navy px-8 transition-transform duration-500 ease-[cubic-bezier(.6,0,.3,1)] ${
+        // text-left (21/09/2026, bug real reportado en mobile): este overlay
+        // es `fixed`, así que su posición en pantalla no depende de dónde
+        // vive en el árbol de React -- pero `text-align` SÍ se hereda por el
+        // árbol de React/DOM, no por la posición visual. Varias páginas
+        // (Historia, Menú, Eventos, Contacto) envuelven <SiteNav /> en su
+        // propio <section> de hero con `text-center` (para centrar su
+        // título), y sin este reset explícito ese `text-center` se colaba
+        // acá adentro -- por eso el overlay aparecía centrado al abrirlo
+        // desde esas páginas, pero alineado a la izquierda desde el Home
+        // (cuyo hero no tiene `text-center`). El layout interno ya se
+        // maneja con flex/items-*, nunca dependió de text-align a propósito
+        // -- este reset lo deja siempre igual sin importar desde qué página
+        // se abra.
+        className={`fixed inset-0 z-50 flex flex-col bg-navy px-8 text-left transition-transform duration-500 ease-[cubic-bezier(.6,0,.3,1)] ${
           open ? "translate-y-0 pointer-events-auto" : "-translate-y-full pointer-events-none"
         }`}
         aria-hidden={!open}

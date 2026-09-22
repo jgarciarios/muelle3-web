@@ -40,52 +40,56 @@ export function MenuCategoryNav({ categorias }: { categorias: Categoria[] }) {
 
     if (secciones.length === 0) return;
 
-    // Bug real (reportado por Juani, 21/09/2026): haciendo scroll rápido,
-    // el indicador se desincronizaba -- marcaba "Sandwiches" activo con
-    // "Ensaladas" ya visible en pantalla.
+    // Bug real, reportado dos veces (21/09/2026 y otra vez el 22/09/2026
+    // -- el primer intento de fix no alcanzó): haciendo scroll rápido con
+    // la rueda del mouse, en cualquiera de las dos direcciones, el
+    // indicador se desincroniza y llega a marcar una categoría 2-3
+    // posiciones detrás de la real.
     //
-    // Causa: en cada disparo del callback, IntersectionObserver manda en
-    // `entries` SOLO las secciones que CAMBIARON de estado desde el
-    // último disparo -- no todas las que siguen intersectando ahora
-    // mismo. El código anterior elegía la "más cercana al top" mirando
-    // nada más que ese lote parcial (`entries.filter(...)`), así que con
-    // scroll rápido (varias secciones cambiando de estado casi al mismo
-    // tiempo, en distintos disparos) el "ganador" podía ser una sección
-    // que ya había salido de pantalla en un disparo anterior y no volvió
-    // a aparecer en el lote actual, en vez de la que realmente está
-    // cruzando la franja de referencia ahora.
+    // Primer intento (el que no alcanzó): mantener un Map con el estado
+    // ACUMULADO de qué secciones intersectan, eligiendo la "más cercana
+    // al top" con `entry.boundingClientRect.top`. Se quedaba corto por
+    // una razón más profunda que la que arregló ese intento: ese
+    // `boundingClientRect` es una FOTO fija de la posición en el momento
+    // en que ESA sección cruzó el umbral por última vez -- no se
+    // actualiza mientras la sección sigue intersectando sin volver a
+    // cruzar un umbral. Con scroll rápido, una sección puede seguir
+    // "intersectando" según el Map con un `top` viejo (de hace varios
+    // frames), mientras la posición real ya cambió mucho -- comparar ese
+    // valor desactualizado contra el de una sección que sí acaba de
+    // disparar dejaba elegir a la ganadora equivocada.
     //
-    // Fix: mantener un mapa con el estado ACUMULADO y real de qué
-    // secciones intersectan en cada momento (se actualiza con cada
-    // entrada que llega, agregando o sacando según `isIntersecting`), y
-    // elegir la "más cercana" siempre sobre ese estado completo, nunca
-    // sobre el lote parcial del callback.
-    const interseccionesActuales = new Map<string, IntersectionObserverEntry>();
+    // Fix real: en cada disparo (el IntersectionObserver ahora se usa
+    // solo como gatillo de "algo cambió, recalculá"), se recorren TODAS
+    // las secciones pidiendo su posición en VIVO con
+    // `getBoundingClientRect()` -- nunca un valor guardado de un evento
+    // anterior. Se elige la última sección (en orden de aparición) cuyo
+    // borde superior ya cruzó la línea de referencia (scrollspy clásico:
+    // "la sección más abajo entre las que ya pasaron el techo"), lo que
+    // da el resultado correcto sin importar la velocidad ni la
+    // dirección del scroll, porque siempre mide la posición actual, no
+    // una vieja.
+    const REFERENCIA_PX = 190; // alto del header fijo (104px) + el nav de categorías (~60px) + margen
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            interseccionesActuales.set(entry.target.id, entry);
-          } else {
-            interseccionesActuales.delete(entry.target.id);
-          }
+    const actualizarActivo = () => {
+      let actual = secciones[0];
+      for (const el of secciones) {
+        if (el.getBoundingClientRect().top <= REFERENCIA_PX) {
+          actual = el;
+        } else {
+          break;
         }
+      }
+      setActivo(actual.id);
+    };
 
-        // De todas las secciones que cruzan la línea de referencia AHORA
-        // (estado completo, no solo lo que cambió en este disparo), la
-        // más cercana a la parte de arriba del viewport es la "activa".
-        const visibles = Array.from(interseccionesActuales.values());
-        if (visibles.length === 0) return;
-        const masCercana = visibles.reduce((a, b) =>
-          Math.abs(a.boundingClientRect.top) < Math.abs(b.boundingClientRect.top) ? a : b,
-        );
-        setActivo(masCercana.target.id);
-      },
-      { rootMargin: "-15% 0px -70% 0px", threshold: 0 },
-    );
+    const observer = new IntersectionObserver(actualizarActivo, {
+      rootMargin: "-15% 0px -70% 0px",
+      threshold: [0, 1],
+    });
 
     secciones.forEach((el) => observer.observe(el));
+    actualizarActivo(); // por si la página ya carga scrolleada (ej. volviendo con "atrás")
     return () => observer.disconnect();
   }, [categorias]);
 
