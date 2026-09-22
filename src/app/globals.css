@@ -64,3 +64,20 @@ body {
     animation: none;
   }
 }
+
+/* Fix (21/09/2026, Foco 1 del pedido de Juani): el splash de carga
+   (SplashScreen) se renderiza en el servidor con su fondo navy ya
+   pintado (es una clase de Tailwind, no depende de JS) pero el logo
+   arranca en opacity:0 hasta que React hidrata y corre la animación de
+   Framer Motion. En una recarga completa (link externo, refresh, volver
+   a escribir la URL) eso deja una pantalla navy sólida y sin nada adentro
+   durante TODO lo que tarde en bajar+ejecutar el JS -- en producción,
+   con conexión lenta, esto es el "pantalla negra sólida" que reportó
+   Juani al navegar entre páginas. La solución: un script inline (ver
+   layout.tsx) que corre ANTES de que el navegador pinte nada y, si esta
+   pestaña ya vio el splash en esta sesión (sessionStorage), le agrega
+   esta clase al <html> para sacar el splash del todo por CSS puro --
+   sin esperar a que React hidrate. */
+html.splash-skip [data-splash-screen] {
+  display: none !important;
+}

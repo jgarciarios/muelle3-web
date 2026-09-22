@@ -2,7 +2,7 @@
 
 > Documento de contexto completo. Si esta conversación de Claude se corta o pierde memoria, empezar por acá — junto con `README.md` (detalle técnico) y el doc de Claude Project `muelle3-preguntas-para-reunion.md` (preguntas abiertas para la reunión con dueños/gerente). Este archivo vive en el repo (`PLAN.md`, raíz) para que tanto Claude (Cowork) como Claude Code puedan leerlo.
 >
-> Última actualización: 2026-09-16.
+> Última actualización: 2026-09-21.
 >
 > **Regla de trabajo:** no inventar contenido, datos, fotos ni decisiones que no estén confirmadas por Juani. Si hay una duda, se pregunta — no se asume.
 
@@ -238,6 +238,85 @@ Juani tiene Claude Code disponible como respaldo si algo falla en este entorno (
 - [ ] **Diseño pedido por Juani el 17/09 (feedback sobre gardiner.com.ar y kansasgrillandbar.com.ar):** cuando se encare la página de Eventos, sumar fotos del interior de Muelle 3 y de la cava (ya sacamos la galería "La terraza / El muelle de día / Nuestro equipo" del Home para no repetir fotos del lugar ahí). Cuando se encare Contacto/Horarios, sumar una foto del personal trabajando.
 - [ ] Nombre de dominio propio a conectar en Vercel antes del lanzamiento.
 - [ ] **Preguntar a los dueños en la llamada: orden de las reviews reales de Google.** La API solo devuelve un máximo de 5 reviews (tope de Google, no editable) y solo permite elegir el ORDEN, no cuáles aparecen: `most_relevant` (el mismo criterio/algoritmo que usa Google Maps por default — mezcla utilidad, detalle y calidad, NO es "usuarios con más reseñas dadas" como criterio separado) o `newest` (las 5 últimas por fecha, sin filtrar por calidad). Definir cuál prefieren antes de conectar la Places API real.
+
+## 14. Sesión 21/09/2026 (tarde) — QA visual antes de mostrarle el sitio a los dueños
+
+Cuatro pedidos puntuales de Juani sobre el deploy de Vercel, ya en el repo real (`~/Proyectos/muelle3-web`), trabajados en orden de prioridad:
+
+**Foco 1 — Pantalla negra sólida al navegar (prioridad más alta).** Diagnosticado con Chrome real contra el deploy de producción (no solo leyendo código): la causa NO era la transición de página (esa dura 350ms, como sospechaba Juani) sino `SplashScreen` (`src/components/splash-screen.tsx`). Se renderiza en el servidor con su fondo navy ya pintado (es una clase de Tailwind, no depende de JS) pero el logo arranca en `opacity:0` hasta que React hidrata y corre la animación de Framer Motion — confirmado navegando directo a `/menu` en el deploy real: pantalla navy sólida, sin logo, varios segundos, hasta que hidrata. En una recarga completa (link externo, refresh, escribir la URL de nuevo — no una navegación interna por `Link`) eso deja esa pantalla navy vacía durante todo lo que tarde en bajar+ejecutar el JS. Con las imágenes de esta sesión (varias de 1-5MB, ver abajo) compitiendo por el mismo ancho de banda, esa espera se estira a los 2-4 segundos reportados.
+
+Fix aplicado (no se tocaron los tiempos de ENTER_MS/HOLD_MS/EXIT_MS del splash — esos ya fueron pedido explícito de Juani el mismo 21/09):
+- Script inline síncrono en `src/app/layout.tsx` (primer hijo del `<body>`, antes de `<SplashScreen />`) que lee el mismo `sessionStorage` que ya usaba `SplashScreen` y, si esta pestaña ya vio el splash, le agrega la clase `splash-skip` al `<html>` ANTES de que el navegador pinte nada — sin esperar a que React hidrate.
+- Regla CSS nueva en `globals.css`: `html.splash-skip [data-splash-screen] { display: none !important }`. `SplashScreen` ahora tiene el atributo `data-splash-screen` en su div raíz.
+- Se agregó `suppressHydrationWarning` al `<html>` (la clase la agrega un script fuera de React a propósito, es esperable que no matchee lo que React renderizó en el servidor para ese atributo puntual).
+- Además, se comprimieron todas las fotos reales pesadas (`public/images/*.png` y `public/images/platos*/**.jpg`) con `sharp` (mismo resultado visual, quality ~78-80, máximo 2200px de ancho): **54.9MB → 25.6MB** en total, sin cambiar ni un nombre de archivo ni una ruta en el código. Esto ayuda tanto al bug del splash (menos competencia por ancho de banda con el JS) como al tiempo real de carga de todo el sitio.
+
+También se detectó (mismo mecanismo) por qué "el overlay de Menú tarda 1-2s en mostrar los links": el botón no responde hasta que React hidrata, y eso tarda lo que tarde en bajar el JS — mismo fix de raíz (menos peso de imágenes) ayuda acá también; no se tocó la lógica de `nav.tsx` en sí.
+
+**Foco 2 — Bug de sincronización en `/menu` (arreglado).** `src/components/menu-category-nav.tsx`: el `IntersectionObserver` mandaba en cada callback SOLO las secciones que cambiaron de estado desde el disparo anterior, no todas las que intersectan ahora — eligiendo el rubro "activo" mirando ese lote parcial, con scroll rápido podía quedar marcada una sección que ya no estaba en pantalla. Fix: se mantiene un `Map` con el estado acumulado y real de intersección, y el rubro activo se elige siempre sobre ese estado completo.
+
+**Foco 3 — Fotos reales en `/menu`.** Juani sumó una carpeta nueva de fotos de platos (`public/images/platos-nuevos/foto-01.jpg` a `foto-21.jpg`, sin nombres descriptivos) el mismo 21/09. Se abrió cada una para confirmar qué plato es de verdad (mismo criterio que ya regía para `public/images/platos/`, ver sección de fotografía en este documento) antes de usarla. Coincidencias confirmadas sin ambigüedad con `menu-data.ts` y ya cargadas en la página:
+- **Entradas**: Fish and chips (`foto-03.jpg`).
+- **Principales**: Fettuccine Gorriti (`foto-02.jpg`), Costillar angus braseado (`foto-12.jpg`), Risotto de hongos (`foto-13.jpg`), Mila del Muelle (ya existía, `platos/mila-del-muelle.jpg`).
+- **Postres**: Flan de dulce de leche (`foto-05.jpg`).
+
+**Categorías sin foto todavía — quedan pendientes, no se inventó ninguna relación:** Pizzas, Sandwiches, Ensaladas, Desayuno & Tarde, Cafetería, Bebidas & Cervezas, Limonadas & Detox, Ponches, Classic Cocktails, Cocktails de Autor. Además quedaron sin usar (no matchean ningún ítem exacto del menú actual, aunque son fotos reales y de buena calidad): un cheesecake de frutos rojos (`foto-14/15/16.jpg` — no hay "cheesecake" en la carta actual), una torta tipo tiramisú (`foto-18.jpg` — tampoco está en la carta), un postre de capas con merengue y durazno (`foto-17.jpg`), gnocchi con estofado (`foto-11.jpg` — se parece a un ñoqui pero ningún ítem de Principales se llama así; "Raviolones del Nono" es un plato distinto, de ravioles), y dos fotos de ambiente/fachada que no son de comida (`foto-19.jpg`: terraza al atardecer con gente; `foto-21.jpg`: cartel "MUELLE 3" en la fachada de madera — quedan como candidatas para Eventos/Historia si hace falta más adelante, ver pendientes de fotografía más arriba). `foto-04.jpg`, `foto-06/07/08.jpg`, `foto-09/10.jpg` (mesas con variedad de platos) tampoco se usaron todavía — quedan disponibles en `platos-nuevos/` para cuando se sume una galería propia en `/menu` o en Eventos.
+
+**Foco 4 — Selector "¿Cuándo pensás venir?" en el Home (funcionalidad NUEVA — pendiente de aprobación de Juani antes de mergear/deployar, tal como lo pidió).** `src/components/mood-carousel.tsx` pasó de exportar `MoodCarousel` (solo fondo, autoplay, switch sol/luna de 2 posiciones) a exportar `HeroExperience`: un componente cliente único que junta el fondo con crossfade, la marca/tagline/botón de Reservar y el selector nuevo, porque el selector necesita recolorear esos elementos según el mood activo y eso no se puede hacer desde `page.tsx` (Server Component). Se sumó el tercer mood "Noche" (usa el mismo fondo de color de marca — navy + resplandor ámbar — que ya existía como fallback para cuando no hay foto real todavía). Los acentos de color por mood usan tokens ya definidos en `globals.css` (celeste para Día, mustard/amber para Atardecer y Noche) — no se inventó paleta nueva. Termina en el mismo botón "Reservar" que ya iba a Meitre. **No se hizo commit/push de este cambio** — queda en el working tree del repo local para que Juani lo revise antes de subirlo.
+
+## Sesión 21/09/2026 (noche) — 4 ajustes puntuales tras revisar capturas mobile
+
+Juani revisó capturas mobile del sitio (deploy de Vercel, con el splash fix /
+observer fix / HeroExperience de la sesión de la tarde ya en el working
+tree) y pidió 4 ajustes puntuales, en orden de prioridad:
+
+**1 — Revertidas las fotos de `/menu`.** Decisión de Juani: no hacían
+falta. `src/app/menu/page.tsx` vuelve a texto puro, como estaba antes de la
+sesión de la tarde (Foco 3). Las fotos de `public/images/platos-nuevos/`
+quedan en el repo sin usar (no se borraron), disponibles si se decide
+retomar la idea más adelante o usarlas en otra sección.
+
+**2 — Copy incorrecto del Home corregido.** El texto "Un lugar con los pies
+en la arena y la vista al muelle" era impreciso — Muelle 3 da al mar (Playa
+Mansa) pero no está sobre la arena; la dirección real confirmada es Rbla.
+Dr. Claudio Williman 22 (ver sección 13). Se cambió a "Frente al mar, con
+vista al muelle" (`src/app/page.tsx`) — no se inventó ubicación nueva, se
+ajustó solo lo que era objetivamente falso.
+
+**3 — Rediseño de "Nuestra Historia".** Feedback de Juani: "mucho texto" y
+"las imágenes quedan raras en ese sector". No era un fix puntual — se
+repensó el layout completo de `src/app/historia/page.tsx` y
+`src/components/historia-collage.tsx`:
+- Antes: un párrafo largo, después un collage con las 3 fotos reales
+  (`equipo-real.png`, `fachada-dia-hq.png`, `terraza.png`) apiladas y
+  rotadas tipo polaroid (posicionamiento absoluto, se superponían), después
+  otro párrafo largo.
+- Ahora: el mismo texto original (sin inventar ni sacar contenido, solo
+  repartido) se divide en 3 bloques cortos, cada uno con una sola foto real
+  al lado, alternando foto izquierda/derecha en desktop para dar ritmo
+  (`HistoriaSection`, nuevo componente reutilizable en
+  `historia-collage.tsx`). Sin rotación ni superposición — en mobile cada
+  bloque cae a una columna simple (foto arriba, texto abajo), en vez de
+  fotos rotadas apiladas sin espacio para la rotación, que era lo que se
+  veía raro.
+
+**4 — Ambigüedad de "Menú" resuelta + salida a Home agregada
+(accesibilidad).** `src/components/nav.tsx`:
+- El link interno que llevaba a la carta del restaurante decía "Menú",
+  igual que el botón que abre/cierra el overlay de navegación — dos cosas
+  distintas con el mismo nombre. Se renombró ese link a **"Carta"** (término
+  real del cliente, ver "Carta 2026.pdf" en la sección 13, no inventado). El
+  botón que abre el overlay se queda como "Menú" (convención estándar).
+- Se agregó **"Inicio"** como primer ítem de la lista de links, antes de
+  "Carta" — antes la única forma de volver al Home desde el overlay era
+  tocar el logo, sin ningún link explícito, lo cual no es obvio para todos
+  los usuarios (ej. una persona mayor).
+
+Verificado con `tsc --noEmit` y `eslint` sobre los archivos tocados, sin
+errores. No se corrió `npm run dev` (ver nota técnica de la sección 12: el
+puente a la máquina de Juani no sirve para levantar un dev server que él
+vea en su propio navegador — la revisión visual la hace Juani en su
+Terminal real o en el próximo deploy).
 
 ## 14. Dónde está cada cosa (mapa de archivos clave)
 

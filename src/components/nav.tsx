@@ -7,8 +7,20 @@ import { motion, type Variants } from "framer-motion";
 import { MEITRE_RESERVATION_URL } from "@/lib/meitre";
 import { ADDRESS_TEXT, GOOGLE_MAPS_EMBED_URL, HORARIOS } from "@/lib/site-info";
 
+// Renombrado 21/09/2026 (pedido de Juani, accesibilidad): antes este link
+// decía "Menú", igual que el botón que abre este mismo overlay -- dos cosas
+// distintas con el mismo nombre confundía (¿"Menú" abre/cierra la
+// navegación, o es la carta del restaurante?). Pasa a "Carta", que es el
+// término que ya usa el cliente (ver "Carta 2026.pdf" en PLAN.md, no es un
+// término inventado). El botón que abre el overlay se queda como "Menú"
+// (convención estándar de navegación, no cambia).
+//
+// Se suma "Inicio" como primer ítem: antes la única forma de volver al Home
+// desde el overlay era tocar el logo, sin ningún link explícito -- no es
+// obvio para todos los usuarios (ej. una persona mayor).
 const links = [
-  { href: "/menu", label: "Menú" },
+  { href: "/", label: "Inicio" },
+  { href: "/menu", label: "Carta" },
   { href: "/historia", label: "Historia" },
   { href: "/eventos", label: "Eventos" },
   { href: "/resenas", label: "Reseñas" },

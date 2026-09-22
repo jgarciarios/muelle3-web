@@ -100,6 +100,12 @@ export function SplashScreen() {
       {show && (
         <motion.div
           data-testid="splash-screen"
+          // data-splash-screen: lo usa la regla `html.splash-skip
+          // [data-splash-screen]` en globals.css para sacar el splash por
+          // CSS puro, sin esperar a que React hidrate (ver layout.tsx y el
+          // comentario en globals.css -- fix del "pantalla negra sólida"
+          // en navegaciones/recargas, 21/09/2026).
+          data-splash-screen
           // z-40: por debajo del overlay del menú mobile (z-50, ver nav.tsx)
           // a propósito. z-40 sigue arriba del header (z-20) para cubrir
           // toda la página en la primera carga, pero nunca gana contra el

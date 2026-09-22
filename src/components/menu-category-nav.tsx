@@ -40,12 +40,42 @@ export function MenuCategoryNav({ categorias }: { categorias: Categoria[] }) {
 
     if (secciones.length === 0) return;
 
+    // Bug real (reportado por Juani, 21/09/2026): haciendo scroll rápido,
+    // el indicador se desincronizaba -- marcaba "Sandwiches" activo con
+    // "Ensaladas" ya visible en pantalla.
+    //
+    // Causa: en cada disparo del callback, IntersectionObserver manda en
+    // `entries` SOLO las secciones que CAMBIARON de estado desde el
+    // último disparo -- no todas las que siguen intersectando ahora
+    // mismo. El código anterior elegía la "más cercana al top" mirando
+    // nada más que ese lote parcial (`entries.filter(...)`), así que con
+    // scroll rápido (varias secciones cambiando de estado casi al mismo
+    // tiempo, en distintos disparos) el "ganador" podía ser una sección
+    // que ya había salido de pantalla en un disparo anterior y no volvió
+    // a aparecer en el lote actual, en vez de la que realmente está
+    // cruzando la franja de referencia ahora.
+    //
+    // Fix: mantener un mapa con el estado ACUMULADO y real de qué
+    // secciones intersectan en cada momento (se actualiza con cada
+    // entrada que llega, agregando o sacando según `isIntersecting`), y
+    // elegir la "más cercana" siempre sobre ese estado completo, nunca
+    // sobre el lote parcial del callback.
+    const interseccionesActuales = new Map<string, IntersectionObserverEntry>();
+
     const observer = new IntersectionObserver(
       (entries) => {
-        // De todas las secciones que cruzan la línea de referencia, la más
-        // cercana a la parte de arriba del viewport es la "activa" — así
-        // no salta si dos rubros cortos entran a la vez en pantalla.
-        const visibles = entries.filter((e) => e.isIntersecting);
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            interseccionesActuales.set(entry.target.id, entry);
+          } else {
+            interseccionesActuales.delete(entry.target.id);
+          }
+        }
+
+        // De todas las secciones que cruzan la línea de referencia AHORA
+        // (estado completo, no solo lo que cambió en este disparo), la
+        // más cercana a la parte de arriba del viewport es la "activa".
+        const visibles = Array.from(interseccionesActuales.values());
         if (visibles.length === 0) return;
         const masCercana = visibles.reduce((a, b) =>
           Math.abs(a.boundingClientRect.top) < Math.abs(b.boundingClientRect.top) ? a : b,

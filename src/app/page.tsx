@@ -1,8 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { SiteNav } from "@/components/nav";
 import { SiteFooter } from "@/components/site-footer";
-import { MoodCarousel } from "@/components/mood-carousel";
+import { HeroExperience } from "@/components/mood-carousel";
 import { GalleryPhoto } from "@/components/gallery-photo";
 import { AmbienceGallery } from "@/components/ambience-gallery";
 import { ReviewsCarousel } from "@/components/reviews-carousel";
@@ -22,44 +21,15 @@ export default function HomePage() {
           nunca inventamos una versión "en blanco" del logo que no existe. */}
       <section className="relative flex min-h-[92vh] items-center justify-center overflow-hidden bg-navy">
         <SiteNav hideLogo />
-        <MoodCarousel />
-        {/* Oscurece un poco toda la foto para que la marca y la línea blanca
-            tengan contraste parejo, más un viñeteado suave centrado detrás
-            del contenido — las fotos reales siguen siendo protagonistas, no
-            se tapan con una capa oscura plana como antes. */}
-        <div className="absolute inset-0 bg-navy/25" />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 60% 55% at 50% 52%, rgba(13,26,38,0.55) 0%, rgba(13,26,38,0.18) 60%, transparent 100%)",
-          }}
-        />
-
-        <div className="relative z-10 mx-auto flex w-full max-w-2xl flex-col items-center px-6 text-center">
-          <div className="mb-9 flex w-full items-center justify-center gap-5 sm:gap-8">
-            <span className="hidden h-px flex-1 bg-white/50 sm:block" />
-            <div className="shrink-0 rounded-sm bg-white p-3 shadow-2xl sm:p-4">
-              <Image
-                src="/images/logo-cropped.png"
-                alt="Muelle 3 — Kitchen & Bar"
-                width={220}
-                height={220}
-                className="h-24 w-24 sm:h-32 sm:w-32"
-                priority
-              />
-            </div>
-            <span className="hidden h-px flex-1 bg-white/50 sm:block" />
-          </div>
-
-          <p className="mb-8 text-xs font-semibold tracking-[0.3em] text-white/85 uppercase sm:text-sm">
-            Playa Mansa · Punta del Este
-          </p>
-
-          <ReservarButton className="border border-white/80 px-10 py-3.5 text-xs font-semibold tracking-[0.25em] text-white uppercase transition hover:bg-white hover:text-navy sm:text-sm">
-            Reservar
-          </ReservarButton>
-        </div>
+        {/* HeroExperience (Foco 4, pedido de Juani 21/09/2026 -- NUEVO,
+            pendiente de su aprobación antes de mergear a producción):
+            selector "¿Cuándo pensás venir?" que deja elegir Día/Atardecer/
+            Noche y cambia el hero completo (foto + acentos de color) para
+            esa experiencia. Reemplaza al viejo MoodCarousel (que solo
+            autoplayeaba el fondo) -- ahora vive todo junto porque el
+            selector necesita recolorear también la marca/tagline/botón de
+            acá abajo, y eso no se puede hacer desde un Server Component. */}
+        <HeroExperience />
       </section>
 
       {/* INTRO — antes usaba el fade por defecto (opacity 0 → 100, 700ms):
@@ -70,7 +40,7 @@ export default function HomePage() {
       <Reveal initialOpacity={0.4} duration={400}>
         <section className="mx-auto max-w-4xl px-6 py-20 text-center">
           <h2 className="font-serif text-3xl font-bold text-ink">
-            Un lugar con los pies en la arena y la vista al muelle
+            Frente al mar, con vista al muelle
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-ink-muted">
             Muelle 3 es un restaurante y bar frente al mar en Playa Mansa, a metros del icónico

@@ -123,6 +123,20 @@ Además del guardado en base, manda un aviso por mail usando la API de Resend (`
 
 `src/app/contacto/` — mapa embebido con las coordenadas reales de Muelle 3 (`src/lib/site-info.ts`, `GOOGLE_MAPS_EMBED_URL`, sin necesitar API key de Google). WhatsApp, dirección textual y horarios se definen en ese mismo archivo (`WHATSAPP_NUMBER`, `ADDRESS_TEXT`, `HORARIOS`) y **están vacíos a propósito** — cada bloque de la página se oculta solo si el dato no está cargado, para nunca mostrar información inventada. Completar ahí cuando Juani confirme los datos reales.
 
+## Notas técnicas — sesión 21/09/2026 (QA visual)
+
+**Segunda pasada de la misma sesión (noche), 4 ajustes puntuales tras revisar capturas mobile — detalle completo en PLAN.md:**
+- `src/app/menu/page.tsx` revertido a texto puro (se habían sumado fotos por categoría, Juani decidió que no hacían falta).
+- Copy del Home corregido (`src/app/page.tsx`): "Un lugar con los pies en la arena y la vista al muelle" era impreciso, pasa a "Frente al mar, con vista al muelle".
+- `/historia` rediseñada (`src/app/historia/page.tsx`, `src/components/historia-collage.tsx`): de un collage con fotos rotadas/superpuestas a bloques alternados texto+foto (`HistoriaSection`), sin rotación ni superposición.
+- `src/components/nav.tsx`: link interno "Menú" (la carta) renombrado a "Carta" para no confundir con el botón "Menú" que abre el overlay; se agregó link "Inicio" como primer ítem del overlay.
+
+
+- **Splash de carga (`src/components/splash-screen.tsx`) y recargas completas**: se agregó un script inline en `src/app/layout.tsx` (antes de `<SplashScreen />`) que chequea `sessionStorage` de forma síncrona, antes de que React hidrate, y le agrega la clase `splash-skip` al `<html>` si ya se vio el splash en esta pestaña. `globals.css` tiene la regla `html.splash-skip [data-splash-screen] { display: none !important }` que lo saca por CSS puro. Esto evita que una recarga completa (link externo, refresh, URL escrita a mano) muestre el splash de nuevo con el logo invisible (`opacity:0` hasta que hidrata JS) durante todo lo que tarde en bajar el bundle — antes se veía como una pantalla navy sólida y vacía. Ver PLAN.md sección 14 para el diagnóstico completo.
+- **Imágenes reales pesadas**: todas las fotos en `public/images/*.png` y `public/images/platos*/**.jpg` se recomprimieron con `sharp` (quality ~78-80, máximo 2200px de ancho) sin cambiar nombres ni rutas — 54.9MB → 25.6MB en total. Si se agregan fotos nuevas a futuro, comprimirlas de entrada (no subir directo el archivo que entrega el fotógrafo) para no reintroducir el mismo problema.
+- **`menu-category-nav.tsx`**: el IntersectionObserver ahora mantiene un `Map` con el estado acumulado de qué secciones intersectan (antes usaba solo el lote parcial de cada callback, lo que se desincronizaba con scroll rápido).
+- **`src/components/mood-carousel.tsx`** exporta ahora `HeroExperience` (antes `MoodCarousel`) — el hero del Home entero (fondo + marca + selector de mood) vive en un solo Client Component. Ver PLAN.md sección 14, Foco 4: es funcionalidad nueva, no mergeada/deployada todavía a propósito.
+
 ## Deploy
 
 Pensado para Vercel (Hobby tier alcanza para el arranque). Conectar el repo de GitHub a un proyecto de Vercel. Env var necesaria para que el sitio funcione como está hoy: `NEXT_PUBLIC_GOOGLE_PLACE_ID`. Las de Supabase (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RESTAURANT_SLUG`) son opcionales por ahora — solo hacen falta si se reconecta el sistema de reservas propio (ver "Reservas (Meitre)"). La URL de Meitre está hardcodeada en `src/lib/meitre.ts`, no es una env var.
